@@ -1,10 +1,12 @@
 package com.example.gamelink.firebase;
 
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,7 +15,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.example.gamelink.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseDatabaseManager {
 
@@ -22,7 +26,8 @@ public class FirebaseDatabaseManager {
     private final DatabaseReference gamesRef;
     private final DatabaseReference messagesRef;
 
-    public FirebaseDatabaseManager() {
+    public FirebaseDatabaseManager(Context context) {
+        FirebaseApp.initializeApp(context); // ✅ ודא ש-Firebase מאותחל
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         usersRef = database.getReference("users");
         gamesRef = database.getReference("games");
@@ -35,6 +40,15 @@ public class FirebaseDatabaseManager {
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User added successfully"))
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to add user", e));
     }
+
+    public void addRating(String userId, int rating, String feedback) {
+        DatabaseReference ratingsRef = FirebaseDatabase.getInstance().getReference("ratings").child(userId);
+        Map<String, Object> ratingData = new HashMap<>();
+        ratingData.put("rating", rating);
+        ratingData.put("feedback", feedback);
+        ratingsRef.setValue(ratingData);
+    }
+
 
     // Get all users
     public void getAllUsers(DataCallback<List<User>> callback) {

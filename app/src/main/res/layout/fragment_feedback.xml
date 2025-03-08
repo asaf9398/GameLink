@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,23 +9,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rate your experience"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
     <RatingBar
         android:id="@+id/rating_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
-        android:stepSize="1.0" />
+        android:stepSize="1.0"
+        android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/feedback_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Write your feedback here"
-        android:layout_marginTop="16dp" />
+        android:padding="8dp"
+        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/submit_button"
         android:layout_width="match_parent"
-     
+        android:layout_height="wrap_content"
+        android:text="Submit Feedback"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="@android:color/white" />
+</LinearLayout>

@@ -30,7 +30,7 @@ public class FeedbackActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submit_button);
 
         // Initialize Firebase Database Manager
-        databaseManager = new FirebaseDatabaseManager();
+        databaseManager = new FirebaseDatabaseManager(this);
 
         // Handle submit button click
         submitButton.setOnClickListener(v -> {

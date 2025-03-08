@@ -33,7 +33,7 @@ public class FeedbackFragment extends Fragment {
         feedbackEditText = view.findViewById(R.id.feedback_edit_text);
         submitButton = view.findViewById(R.id.submit_button);
 
-        databaseManager = new FirebaseDatabaseManager();
+        databaseManager = new FirebaseDatabaseManager(requireContext());
 
         submitButton.setOnClickListener(v -> {
             float rating = ratingBar.getRating();

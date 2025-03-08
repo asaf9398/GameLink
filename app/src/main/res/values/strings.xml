@@ -1,3 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GameLink</string>
+	<string name="app_logo">GameLink</string>
+    <string name="google_sign_in">Sign in with Google</string>
+    <string name="sign_in_prompt">Or use your email to sign in</string>
+	<string name="default_web_client_id">your-client-id</string>
+
 </resources>

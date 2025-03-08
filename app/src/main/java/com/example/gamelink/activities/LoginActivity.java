@@ -7,11 +7,11 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gamelink.firebase.FirebaseAuthManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
-import com.example.gamelink.activities.R;
-import com.example.gamelink.activities.firebase.FirebaseAuthManager;
+import com.example.gamelink.R;
 
 public class LoginActivity extends AppCompatActivity {
 

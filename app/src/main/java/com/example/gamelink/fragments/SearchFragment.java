@@ -41,7 +41,7 @@ public class SearchFragment extends Fragment {
         searchButton = view.findViewById(R.id.search_button);
         searchRecyclerView = view.findViewById(R.id.search_recycler_view);
 
-        databaseManager = new FirebaseDatabaseManager();
+        databaseManager = new FirebaseDatabaseManager(requireContext());
 
         searchResults = new ArrayList<>();
         userAdapter = new UserAdapter(searchResults);

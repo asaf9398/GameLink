@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "636840749281",
+    "project_id": "gamelink-e8ed8",
+    "storage_bucket": "gamelink-e8ed8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636840749281:android:e36fcfea9d6fac3d29efa0",
+        "android_client_info": {
+          "package_name": "com.example.gamelink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGYCEqF5GvWcrOIombjXxOozXERawp55k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -30,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
         countryEditText = findViewById(R.id.country_edit_text);
         registerButton = findViewById(R.id.register_button);
 
-        databaseManager = new FirebaseDatabaseManager();
+        databaseManager = new FirebaseDatabaseManager(this);
 
         registerButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();

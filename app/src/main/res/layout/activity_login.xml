@@ -1,16 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/background_color">
+    android:background="@color/background_color"
+    tools:context=".activities.LoginActivity">
 
     <ImageView
         android:id="@+id/logo_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher"
+        android:src="@mipmap/ic_launcher"
         android:contentDescription="@string/app_logo"
         android:layout_marginBottom="24dp" />
 
@@ -18,7 +21,7 @@
         android:id="@+id/google_sign_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign in with Google"
+        android:text="@string/google_sign_in"
         android:background="@drawable/button_background"
         android:textColor="@color/white"
         android:layout_marginBottom="16dp" />
@@ -28,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Or use your email to sign in"
+        android:text="@string/sign_in_prompt"
         android:textColor="@color/black"
         android:layout_marginBottom="16dp" />
 </LinearLayout>

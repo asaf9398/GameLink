@@ -37,7 +37,7 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.send_button);
 
         // Initialize Firebase Database Manager
-        databaseManager = new FirebaseDatabaseManager();
+        databaseManager = new FirebaseDatabaseManager(this);
 
         // Initialize message list and adapter
         messages = new ArrayList<>();
