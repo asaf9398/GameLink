@@ -1,52 +1,72 @@
 package com.example.gamelink.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gamelink.MainActivity;
 import com.example.gamelink.R;
-import com.example.gamelink.firebase.FirebaseDatabaseManager;
-import com.example.gamelink.models.User;
-
-import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText nameEditText, ageEditText, countryEditText;
+    private EditText emailEditText, passwordEditText;
     private Button registerButton;
-
-    private FirebaseDatabaseManager databaseManager;
+    private ProgressBar progressBar;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        nameEditText = findViewById(R.id.name_edit_text);
-        ageEditText = findViewById(R.id.age_edit_text);
-        countryEditText = findViewById(R.id.country_edit_text);
+        // אתחול Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        // קישור ל-UI
+        emailEditText = findViewById(R.id.email);
+        passwordEditText = findViewById(R.id.password);
         registerButton = findViewById(R.id.register_button);
+        progressBar = findViewById(R.id.progress_bar);
 
-        databaseManager = new FirebaseDatabaseManager(this);
+        // כפתור הרשמה
+        registerButton.setOnClickListener(v -> registerUser());
+    }
 
-        registerButton.setOnClickListener(v -> {
-            String name = nameEditText.getText().toString().trim();
-            String ageText = ageEditText.getText().toString().trim();
-            String country = countryEditText.getText().toString().trim();
+    private void registerUser() {
+        String email = emailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
 
-            if (!name.isEmpty() && !ageText.isEmpty() && !country.isEmpty()) {
-                int age = Integer.parseInt(ageText);
-                User user = new User("example_user_id", name, age, country, new ArrayList<>());
-                databaseManager.addUser(user);
-                Toast.makeText(this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (email.isEmpty() || password.isEmpty() || password.length() < 6) {
+            Toast.makeText(this, "יש למלא את כל השדות וסיסמה חייבת להיות לפחות 6 תווים!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    progressBar.setVisibility(View.GONE);
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            Toast.makeText(this, "נרשמת בהצלחה!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Log.e("RegisterError", "הרשמה נכשלה", task.getException());
+                        Toast.makeText(this, "הרשמה נכשלה! נסה שוב.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
-

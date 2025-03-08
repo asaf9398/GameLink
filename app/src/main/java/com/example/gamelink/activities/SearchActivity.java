@@ -36,7 +36,7 @@ public class SearchActivity extends AppCompatActivity {
         searchButton = findViewById(R.id.search_button);
         searchRecyclerView = findViewById(R.id.search_recycler_view);
 
-        databaseManager = new FirebaseDatabaseManager(this);
+        databaseManager = new FirebaseDatabaseManager();
 
         searchResults = new ArrayList<>();
         userAdapter = new UserAdapter(searchResults);

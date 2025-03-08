@@ -1,33 +1,47 @@
 package com.example.gamelink;
 
+import android.content.Intent;
 import android.os.Bundle;
-
+import android.view.View;
+import android.widget.Button;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.gamelink.R;
+import com.example.gamelink.activities.LoginActivity;
 import com.example.gamelink.fragments.ChatFragment;
 import com.example.gamelink.fragments.FeedbackFragment;
 import com.example.gamelink.fragments.NotificationsFragment;
 import com.example.gamelink.fragments.ProfileFragment;
 import com.example.gamelink.fragments.SearchFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+    private Button btnLogout; // כפתור התנתקות
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        FirebaseApp.initializeApp(this); // 🛠 חובה לבצע אתחול ל-Firebase
-        setContentView(R.layout.activity_main);
 
+        firebaseAuth = FirebaseAuth.getInstance();
 
+        // אם המשתמש לא מחובר, להפנות אותו למסך ההתחברות
+        if (firebaseAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_main);
+        FirebaseApp.initializeApp(this);
+
+        // ניווט תחתון בין מסכים
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        // Set default fragment
-        loadFragment(new SearchFragment());
+        loadFragment(new SearchFragment()); // ברירת מחדל - מסך החיפוש
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             Fragment selectedFragment = null;
@@ -48,8 +62,12 @@ public class MainActivity extends AppCompatActivity {
             return loadFragment(selectedFragment);
         });
 
+        // כפתור התנתקות
+        //btnLogout = findViewById(R.id.btn_logout);
+        //btnLogout.setOnClickListener(view -> logoutUser());
     }
 
+    // פונקציה לטעינת פרגמנט
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
@@ -58,5 +76,14 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    // פונקציה להתנתקות מהמשתמש והעברה למסך ההתחברות
+    private void logoutUser() {
+        firebaseAuth.signOut();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // מנקה את ה-Back Stack
+        startActivity(intent);
+        finish();
     }
 }

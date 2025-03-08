@@ -39,7 +39,7 @@ public class ChatFragment extends Fragment {
         messageEditText = view.findViewById(R.id.message_edit_text);
         sendButton = view.findViewById(R.id.send_button);
 
-        databaseManager = new FirebaseDatabaseManager(requireContext());
+        databaseManager = new FirebaseDatabaseManager();
 
         messages = new ArrayList<>();
         chatAdapter = new ChatAdapter(messages);

@@ -12,7 +12,20 @@
           "package_name": "com.example.gamelink"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "636840749281-igk9ek0ijvg73dav5hcm66lu9esa8ojj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gamelink",
+            "certificate_hash": "d2266612b23938a8c67e18e0bfdc02762c7c12d9"
+          }
+        },
+        {
+          "client_id": "636840749281-sg36t514v345u7o0n99q1go0v8tk6b3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCGYCEqF5GvWcrOIombjXxOozXERawp55k"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636840749281-sg36t514v345u7o0n99q1go0v8tk6b3i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
