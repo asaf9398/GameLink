@@ -1,48 +1,15 @@
-# .gitignore for Android Studio
-
-# Ignore Gradle files
-.gradle/
-build/
-
-# Ignore Android Studio specific files
-.idea/
 *.iml
-
-# Ignore local configuration files
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
 local.properties
-
-# Ignore user-specific files
-*.log
-*.swp
-*~
-
-# Ignore compiled classes
-*.class
-
-# Ignore APK and other generated files
-*.apk
-*.ap_ 
-
-# Ignore native build files
-obj/
-*.o
-*.so
-
-# Ignore Android Studio specific caches
-*.hprof
-
-# Ignore dependency cache
-.gradle/
-
-# Ignore external native build folder
-.externalNativeBuild/
-
-# Ignore Android packaging files
-bin/
-out/
-
-# Ignore other build directories
-build/
-
-# Ignore lint result files
-lint/intermediates/
