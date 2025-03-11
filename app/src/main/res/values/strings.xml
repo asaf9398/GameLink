@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+   
     <string name="app_name">GameLink</string>
-	<string name="app_logo">GameLink</string>
+
+   
+    <string name="feedback_title">דרג את החוויה שלך</string>
+    <string name="feedback_hint">כתוב כאן את המשוב שלך</string>
+    <string name="feedback_button_submit">שלח משוב</string>
+
+   
+    <string name="profile_name">שם משתמש</string>
+    <string name="profile_email">אימייל</string>
+    <string name="profile_button_logout">התנתקות</string>
+    <string name="profile_button_favorites">משחקים מועדפים</string>
+
+  
+    <string name="search_game_hint">הזן משחק</string>
+    <string name="search_country_hint">הזן מדינה</string>
+    <string name="search_button">חפש</string>
+
+   
     <string name="google_sign_in">Sign in with Google</string>
     <string name="sign_in_prompt">Or use your email to sign in</string>
-	<string name="default_web_client_id">your-client-id</string>
+    <string name="default_web_client_id">your-client-id</string>
 
 </resources>

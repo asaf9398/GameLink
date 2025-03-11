@@ -1,34 +1,79 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/game_edit_text"
+    <!-- כותרת למסך החיפוש -->
+    <TextView
+        android:id="@+id/search_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find Players"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- בחירת משחק -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_game_text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Game"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp">
 
-    <EditText
-        android:id="@+id/country_edit_text"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/search_game_autocomplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- בחירת ארץ -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_country_text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Country"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp">
 
-    <Button
-        android:id="@+id/search_button"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/search_country_autocomplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- כפתורי חיפוש/פילטרים -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search"
-        android:layout_marginBottom="8dp" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_advanced_filter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filters"/>
+    </LinearLayout>
+
+    <!-- רשימת תוצאות החיפוש -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
 </LinearLayout>

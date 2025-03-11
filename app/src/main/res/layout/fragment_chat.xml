@@ -1,33 +1,98 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/white">
 
+    <!-- אזור עליון (Top Bar) -->
+    <LinearLayout
+        android:id="@+id/chat_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@color/purple_700">
+
+        <!-- כותרת צ'אט או שם משתמש -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Chat with XYZ"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center_vertical" />
+
+        <!-- אייקון מידע או פרופיל -->
+        <ImageButton
+            android:id="@+id/chat_info_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_info"  
+            android:contentDescription="Info"
+            android:tint="@android:color/white" />
+    </LinearLayout>
+
+    <!-- רשימת הודעות -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="8dp" />
 
+    <!-- אזור השליחה (Compose bar) -->
     <LinearLayout
+        android:id="@+id/chat_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="4dp"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:background="@color/white"
+        android:elevation="4dp">
 
-        <EditText
-            android:id="@+id/message_edit_text"
+        <!-- כפתור צרוף קובץ -->
+        <ImageButton
+            android:id="@+id/chat_attach_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_attach_file"
+            android:contentDescription="Attach"
+            android:tint="@color/purple_700"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <!-- שדה טקסט להודעה -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type a message"
-            android:padding="8dp" />
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxBackgroundMode="filled">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/chat_message_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type a message..." />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- כפתור שליחה -->
         <ImageButton
-            android:id="@+id/send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_send" />
+            android:id="@+id/chat_send_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_send"
+            android:tint="@color/purple_700"
+            android:contentDescription="Send"
+            android:background="?attr/selectableItemBackgroundBorderless" />
     </LinearLayout>
 </LinearLayout>

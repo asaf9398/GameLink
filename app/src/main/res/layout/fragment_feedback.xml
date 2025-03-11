@@ -1,41 +1,94 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rate your experience"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
-
-    <RatingBar
-        android:id="@+id/rating_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="5"
-        android:stepSize="1.0"
-        android:layout_marginBottom="16dp" />
-
-    <EditText
-        android:id="@+id/feedback_edit_text"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Write your feedback here"
-        android:padding="8dp"
-        android:layout_marginBottom="16dp"
-        android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Submit Feedback"
-        android:background="?attr/selectableItemBackground"
-        android:textColor="@android:color/white" />
-</LinearLayout>
+        <!-- כותרת ראשית למסך המשוב -->
+        <TextView
+            android:id="@+id/feedback_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Provide Your Feedback"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <!-- דירוג כוכבים (RatingBar סטנדרטי) -->
+        <RatingBar
+            android:id="@+id/feedback_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:numStars="5"
+            android:layout_marginBottom="16dp" />
+
+        <!-- קבוצת RadioGroup רגילה (קטגוריית פידבק) -->
+        <RadioGroup
+            android:id="@+id/feedback_category_radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/feedback_category_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Feedback" />
+
+            <RadioButton
+                android:id="@+id/feedback_category_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="App Feedback" />
+
+            <RadioButton
+                android:id="@+id/feedback_category_bug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report a Bug" />
+        </RadioGroup>
+
+        <!-- טקסט מרובה שורות -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/feedback_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Share your thoughts...">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/feedback_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
+                android:maxLines="5"
+                android:gravity="top|start" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- אפשרות הגשת פידבק אנונימי -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/feedback_anon_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit Anonymously"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- כפתור שליחה -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/feedback_submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Feedback"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>

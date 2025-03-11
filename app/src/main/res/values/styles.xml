@@ -1,10 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.GameLink" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    
+    <style name="Base.Theme.GameLink" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryVariant</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+       
     </style>
 
+
+    <style name="Widget.MaterialComponents.RatingBar" parent="@style/Widget.AppCompat.RatingBar"/>
+
     <style name="Theme.GameLink" parent="Base.Theme.GameLink" />
+
+   
+    <style name="Widget.GameLink.Button" parent="Widget.Material3.Button">
+        <item name="android:layout_margin">@dimen/margin_small</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="MaterialRecyclerViewStyle">
+        <item name="android:dividerHeight">8dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
+    <style name="Widget.GameLink.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="android:layout_margin">@dimen/margin_small</item>
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxBackgroundColor">@color/white</item>
+    </style>
+
+
+        <!-- סגנון לכפתור FilledButton, יורש מהכפתור הרגיל של Material -->
+    <style name="Widget.MaterialComponents.Button.FilledButton"
+            parent="@style/Widget.MaterialComponents.Button">
+            <!-- אם תרצה לשנות צבע רקע או טקסט, הוסף כאן את התכונות -->
+            <!-- <item name="android:backgroundTint">@color/purple_700</item> -->
+            <!-- <item name="android:textColor">@android:color/white</item> -->
+    </style>
+
+
+        <!-- סגנון לאימג'וויו בצורת עיגול -->
+    <style name="ShapeAppearanceOverlay.MaterialComponents.Circle.ImageView"
+            parent="@style/ShapeAppearance.MaterialComponents.SmallComponent">
+
+            <!-- יש כל מיני הורים אפשריים. זה אחד שאפשר להשתמש בו כבסיס. -->
+            <item name="cornerFamily">rounded</item>
+            <item name="cornerSize">50%</item>
+    </style>
+
+
+
 </resources>

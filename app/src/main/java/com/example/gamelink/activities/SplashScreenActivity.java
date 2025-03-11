@@ -6,7 +6,6 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gamelink.MainActivity;
 import com.example.gamelink.R;
 
 public class SplashScreenActivity extends AppCompatActivity {

@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.gamelink.models.Game;
+import com.example.gamelink.models.Message;
 import com.example.gamelink.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,10 +14,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ *  מנהל פעולות מול Firebase Realtime Database
+ *  כולל הוספת / קריאת משתמשים, משחקים, הודעות, וכו’.
+ */
 public class FirebaseDatabaseManager {
 
     private static final String TAG = "FirebaseDatabaseManager";
@@ -25,19 +31,23 @@ public class FirebaseDatabaseManager {
 
     public FirebaseDatabaseManager() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        usersRef = database.getReference("users");
-        gamesRef = database.getReference("games");
+        usersRef    = database.getReference("users");
+        gamesRef    = database.getReference("games");
         messagesRef = database.getReference("messages");
     }
 
-    // 🔹 הוספת משתמש חדש
+    // ********************************************************************
+    // ***********************  User  *************************************
+    // ********************************************************************
+
+    // הוספת משתמש חדש
     public void addUser(User user) {
         usersRef.child(user.getUserId()).setValue(user)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User added successfully"))
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to add user", e));
     }
 
-    // 🔹 הוספת דירוג למשתמש (מאפשר כמה דירוגים לכל משתמש)
+    // הוספת דירוג למשתמש
     public void addRating(String userId, int rating, String feedback) {
         DatabaseReference ratingsRef = usersRef.child(userId).child("ratings").push();
         Map<String, Object> ratingData = new HashMap<>();
@@ -46,25 +56,25 @@ public class FirebaseDatabaseManager {
         ratingsRef.setValue(ratingData);
     }
 
-    // 🔹 קבלת כל המשתמשים
+    // קבלת כל המשתמשים
     public void getAllUsers(DataCallback<List<User>> callback) {
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<User> users = new ArrayList<>();
-
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     if (userSnapshot.exists()) {
                         try {
-                            String userId = userSnapshot.child("userId").getValue(String.class);
-                            String name = userSnapshot.child("name").getValue(String.class);
-                            int age = userSnapshot.child("age").getValue(Integer.class);
+                            String userId  = userSnapshot.child("userId").getValue(String.class);
+                            String name    = userSnapshot.child("name").getValue(String.class);
+                            int age        = userSnapshot.child("age").getValue(Integer.class) == null
+                                    ? 0
+                                    : userSnapshot.child("age").getValue(Integer.class);
                             String country = userSnapshot.child("country").getValue(String.class);
 
                             List<String> favoriteGames = new ArrayList<>();
                             if (userSnapshot.child("favoriteGames").exists()) {
                                 Object gamesObject = userSnapshot.child("favoriteGames").getValue();
-
                                 if (gamesObject instanceof List) {
                                     favoriteGames = (List<String>) gamesObject;
                                 } else if (gamesObject instanceof Map) {
@@ -82,8 +92,6 @@ public class FirebaseDatabaseManager {
                 }
                 callback.onSuccess(users);
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "Failed to fetch users", error.toException());
@@ -92,111 +100,154 @@ public class FirebaseDatabaseManager {
         });
     }
 
-    // 🔹 הוספת משחק חדש למערכת
+    // ********************************************************************
+    // ***********************  Messages (Chat)  **************************
+    // ********************************************************************
+
+    // הוספת אובייקט Message לצ’אט
+    public void addMessageObject(String chatId, Message message) {
+        String msgId = messagesRef.child(chatId).push().getKey();
+        if (msgId != null) {
+            messagesRef.child(chatId)
+                    .child(msgId)
+                    .setValue(message)
+                    .addOnSuccessListener(aVoid ->
+                            Log.d(TAG, "Message added successfully as object"))
+                    .addOnFailureListener(e ->
+                            Log.e(TAG, "Failed to add message object", e));
+        }
+    }
+
+    // טעינת הודעות כ-List<Message>
+    public void getMessageObjects(String chatId, DataCallback<List<Message>> callback) {
+        messagesRef.child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Message> messages = new ArrayList<>();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Message msg = ds.getValue(Message.class);
+                    if (msg != null) {
+                        messages.add(msg);
+                    }
+                }
+                callback.onSuccess(messages);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailure(error.toException());
+            }
+        });
+    }
+
+    // ********************************************************************
+    // ***********************  Global Games  *****************************
+    // ********************************************************************
+
+    /**
+     * הוספת אובייקט משחק לנתיב "games/gameId"
+     * @param game אובייקט המשחק
+     * @param callback ממשק שיודיע על הצלחה או כישלון (OperationCallback)
+     */
+    public void addGameObject(Game game, OperationCallback callback) {
+        gamesRef.child(game.getGameId())
+                .setValue(game)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Global game added");
+                    callback.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to add global game", e);
+                    callback.onFailure(e);
+                });
+    }
+
+    /**
+     * משיכת כל המשחקים הגלובליים
+     */
+    public void getAllGlobalGames(DataCallback<List<Game>> callback) {
+        gamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Game> result = new ArrayList<>();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Game g = ds.getValue(Game.class);
+                    if(g != null) {
+                        result.add(g);
+                    }
+                }
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailure(error.toException());
+            }
+        });
+    }
+
+    // ********************************************************************
+    // ***********************  Favorite Games (User-Specific)  ***********
+    // ********************************************************************
+
+    // הוספת משחק מלא לרשימת המועדפים של משתמש (אובייקט Game)
+    public void addFavoriteGameObject(String userId, Game game) {
+        usersRef.child(userId)
+                .child("favoriteGames")
+                .child(game.getGameId())
+                .setValue(game)
+                .addOnSuccessListener(aVoid ->
+                        Log.d(TAG, "Game object added to favorites"))
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Failed to add favorite game object", e));
+    }
+
+    // טעינת משחקים מועדפים של משתמש כאובייקטי Game
+    public void getUserFavoriteGamesAsObjects(String userId, DataCallback<List<Game>> callback) {
+        usersRef.child(userId).child("favoriteGames")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<Game> games = new ArrayList<>();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            Game g = ds.getValue(Game.class);
+                            if (g != null) {
+                                games.add(g);
+                            }
+                        }
+                        callback.onSuccess(games);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callback.onFailure(error.toException());
+                    }
+                });
+    }
+
+    // מחיקת משחק מועדף לפי ה-gameId
+    public void removeFavoriteGameObject(String userId, String gameId) {
+        usersRef.child(userId)
+                .child("favoriteGames")
+                .child(gameId)
+                .removeValue()
+                .addOnSuccessListener(aVoid ->
+                        Log.d(TAG, "Game object removed from favorites"))
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Failed to remove favorite game object", e));
+    }
+
+    // ********************************************************************
+    // ***********************  Deprecated or Examples *********************
+    // ********************************************************************
+    // לדוגמה (אם עדיין משתמשים בהם):
     public void addGame(String gameId, String gameName) {
         gamesRef.child(gameId).setValue(gameName)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Game added successfully"))
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to add game", e));
     }
 
-    // 🔹 הוספת הודעה לצ'אט (כעת עם מזהה ייחודי)
-    public void addMessage(String chatId, String messageId, String messageContent) {
-        messagesRef.child(chatId).child(messageId).setValue(messageContent)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Message added successfully"))
-                .addOnFailureListener(e -> Log.e(TAG, "Failed to add message", e));
-    }
+    // ********************************************************************
+    // ************************   Internal Classes  ************************
+    // ********************************************************************
 
-
-    // 🔹 קבלת הודעות מצ'אט
-    public void getMessages(String chatId, DataCallback<List<String>> callback) {
-        messagesRef.child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> messages = new ArrayList<>();
-                for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
-                    String message = messageSnapshot.getValue(String.class);
-                    if (message != null) {
-                        messages.add(message);
-                    }
-                }
-                callback.onSuccess(messages);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Failed to fetch messages", error.toException());
-                callback.onFailure(error.toException());
-            }
-        });
-    }
-
-    // 🔹 הוספת משחק מועדף (נוסף עם מזהה ייחודי)
-    public void addFavoriteGame(String userId, String gameId, String gameName) {
-        usersRef.child(userId).child("favoriteGames").child(gameId).setValue(gameName)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Game added to favorites"))
-                .addOnFailureListener(e -> Log.e(TAG, "Failed to add favorite game", e));
-    }
-
-    // 🔹 הסרת משחק מרשימת המועדפים לפי מזהה
-    public void removeFavoriteGame(String userId, String gameName) {
-        usersRef.child(userId).child("favoriteGames").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    List<String> favoriteGames = new ArrayList<>();
-                    for (DataSnapshot gameSnapshot : snapshot.getChildren()) {
-                        String game = gameSnapshot.getValue(String.class);
-                        if (game != null && !game.equals(gameName)) {
-                            favoriteGames.add(game);
-                        }
-                    }
-                    // עדכון הרשימה החדשה בלי המשחק שנמחק
-                    usersRef.child(userId).child("favoriteGames").setValue(favoriteGames)
-                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Game removed from favorites"))
-                            .addOnFailureListener(e -> Log.e(TAG, "Failed to remove favorite game", e));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Failed to fetch favorite games", error.toException());
-            }
-        });
-    }
-
-
-    // 🔹 קבלת משחקים מועדפים עם מזהה (מחלקת עזר GameEntry)
-    public void getUserFavoriteGames(String userId, DataCallback<List<GameEntry>> callback) {
-        usersRef.child(userId).child("favoriteGames").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<GameEntry> games = new ArrayList<>();
-
-                if (snapshot.exists()) {
-                    for (DataSnapshot gameSnapshot : snapshot.getChildren()) {
-                        String gameId = gameSnapshot.getKey();  // המפתח הוא מזהה המשחק
-                        String gameName = gameSnapshot.getValue(String.class);  // הערך הוא שם המשחק
-
-                        if (gameId != null && gameName != null) {
-                            games.add(new GameEntry(gameId, gameName));
-                        }
-                    }
-                }
-                callback.onSuccess(games);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Failed to fetch favorite games", error.toException());
-                callback.onFailure(error.toException());
-            }
-        });
-    }
-
-
-
-
-    // 🔹 מחלקת עזר להצגת משחק עם מזהה + שם
     public static class GameEntry {
         private String gameId;
         private String gameName;
@@ -208,18 +259,19 @@ public class FirebaseDatabaseManager {
             this.gameName = gameName;
         }
 
-        public String getGameId() {
-            return gameId;
-        }
-
-        public String getGameName() {
-            return gameName;
-        }
+        public String getGameId() { return gameId; }
+        public String getGameName() { return gameName; }
     }
 
-    // 🔹 ממשק להחזרת נתונים
+    // ממשק בסיסי להחזרת נתונים
     public interface DataCallback<T> {
         void onSuccess(T data);
+        void onFailure(Exception e);
+    }
+
+    // **הוספת OperationCallback** לתמיכה בהצלחת או כישלון פעולה
+    public interface OperationCallback {
+        void onSuccess();
         void onFailure(Exception e);
     }
 }

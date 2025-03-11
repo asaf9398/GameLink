@@ -10,10 +10,10 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.gamelink.activities.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.example.gamelink.R;
-import com.example.gamelink.activities.ChatActivity;
 
 public class ChatNotificationService extends FirebaseMessagingService {
 
@@ -41,7 +41,10 @@ public class ChatNotificationService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        Intent intent = new Intent(this, ChatActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
+// אפשר להוסיף extra אם צריך לזכור שהגענו מהתראה של צ'אט
+        intent.putExtra("openChat", true);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)

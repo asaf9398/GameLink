@@ -1,13 +1,13 @@
-package com.example.gamelink;
+package com.example.gamelink.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import com.example.gamelink.activities.LoginActivity;
+
+import com.example.gamelink.R;
 import com.example.gamelink.fragments.ChatFragment;
 import com.example.gamelink.fragments.FeedbackFragment;
 import com.example.gamelink.fragments.NotificationsFragment;
