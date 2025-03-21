@@ -8,6 +8,7 @@ public class User {
     private int age;
     private String country;
     private List<String> favoriteGames;
+    private List<String> friends;
 
     public User() {} // דרוש לפיירבייס
 
@@ -20,7 +21,13 @@ public class User {
     }
 
     // אפשר להשאיר גם בנאי "ישן" אם אתם רוצים, אבל מומלץ לאחד ולוודא שקוד יצירת user משתמש בבנאי החדש.
+    public List<String> getFriends() {
+        return friends;
+    }
 
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
     public String getUserId() {
         return userId;
     }

@@ -10,10 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamelink.R;
 import com.example.gamelink.activities.FavoriteGamesActivity;
 import com.example.gamelink.activities.LoginActivity;
+import com.example.gamelink.adapters.UserAdapter;
 import com.example.gamelink.firebase.FirebaseDatabaseManager;
 import com.example.gamelink.models.User;
 import com.google.android.material.button.MaterialButton;
@@ -22,13 +25,17 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-    private ShapeableImageView profileImageView; // תמונת פרופיל עגולה
+    private ShapeableImageView profileImageView;
     private MaterialTextView nameTextView, emailTextView, ratingTextView;
     private MaterialButton logoutButton, favoriteGamesButton, editProfileButton;
+    private RecyclerView friendsRecyclerView;
+    private UserAdapter friendsAdapter;
+    private List<User> friendsList;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabaseManager databaseManager;
@@ -41,32 +48,37 @@ public class ProfileFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        profileImageView = view.findViewById(R.id.profile_image_view);
-        nameTextView     = view.findViewById(R.id.profile_name_text_view);
-        emailTextView    = view.findViewById(R.id.profile_email_text_view);
-        ratingTextView   = view.findViewById(R.id.profile_rating_text_view);
+        // קישור לרכיבים
+        profileImageView     = view.findViewById(R.id.profile_image_view);
+        nameTextView         = view.findViewById(R.id.profile_name_text_view);
+        emailTextView        = view.findViewById(R.id.profile_email_text_view);
+        ratingTextView       = view.findViewById(R.id.profile_rating_text_view);
+        friendsRecyclerView  = view.findViewById(R.id.profile_friends_recycler);
+        logoutButton         = view.findViewById(R.id.profile_logout_button);
+        favoriteGamesButton  = view.findViewById(R.id.profile_favorite_games_button);
+        editProfileButton    = view.findViewById(R.id.profile_edit_button);
 
-        logoutButton        = view.findViewById(R.id.profile_logout_button);
-        favoriteGamesButton = view.findViewById(R.id.profile_favorite_games_button);
-        editProfileButton   = view.findViewById(R.id.profile_edit_button);
-
+        // אתחול אובייקטים
         mAuth = FirebaseAuth.getInstance();
         databaseManager = new FirebaseDatabaseManager();
+        friendsList = new ArrayList<>();
+
+        // אתחול RecyclerView
+        friendsAdapter = new UserAdapter(friendsList, null); // בפרופיל לא מוסיפים חברים
+        friendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        friendsRecyclerView.setAdapter(friendsAdapter);
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             emailTextView.setText(user.getEmail());
 
-            // טוענים נתוני משתמש מ-Firebase
+            // טען פרטי משתמש
             databaseManager.getAllUsers(new FirebaseDatabaseManager.DataCallback<List<User>>() {
                 @Override
                 public void onSuccess(List<User> users) {
                     for (User u : users) {
                         if (u.getUserId() != null && u.getUserId().equals(user.getUid())) {
-                            nameTextView.setText(u.getName() != null ? u.getName() : "No Name");
-                            // אפשר להציג כאן average rating (אם הייתם שומרים בגוף ה-User)
-                            // למשל:
-                            // ratingTextView.setText(String.valueOf(u.getAverageRating()));
+                            nameTextView.setText(u.getNickname() != null ? u.getNickname() : "No Name");
                             break;
                         }
                     }
@@ -74,31 +86,39 @@ public class ProfileFragment extends Fragment {
 
                 @Override
                 public void onFailure(Exception e) {
-                    Toast.makeText(getActivity(), "שגיאה בטעינת הנתונים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "שגיאה בטעינת הנתונים", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // טען רשימת חברים
+            databaseManager.getUserFriends(user.getUid(), new FirebaseDatabaseManager.DataCallback<List<User>>() {
+                @Override
+                public void onSuccess(List<User> data) {
+                    friendsList.clear();
+                    friendsList.addAll(data);
+                    friendsAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(getContext(), "שגיאה בטעינת חברים", Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
-        // כפתור עריכת פרופיל (למשל מעבר ל-EditProfileActivity)
+        // פעולות לחצנים
         editProfileButton.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Edit Profile (not implemented)", Toast.LENGTH_SHORT).show();
-            // אפשר לפתוח Activity לעריכת הפרופיל
         });
 
-        // התנתקות
         logoutButton.setOnClickListener(v -> {
             mAuth.signOut();
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-            if (getActivity() != null) {
-                getActivity().finish();
-            }
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            if (getActivity() != null) getActivity().finish();
         });
 
-        // מעבר למסך המשחקים המועדפים
         favoriteGamesButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), FavoriteGamesActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(getActivity(), FavoriteGamesActivity.class));
         });
 
         return view;

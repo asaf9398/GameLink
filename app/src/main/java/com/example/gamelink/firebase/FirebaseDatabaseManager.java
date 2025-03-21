@@ -403,6 +403,48 @@ public class FirebaseDatabaseManager {
         });
     }
 
+    public void addFriend(String userId, String friendId, OperationCallback callback) {
+        usersRef.child(userId).child("friends").child(friendId).setValue(true)
+                .addOnSuccessListener(aVoid -> usersRef.child(friendId).child("friends").child(userId).setValue(true)
+                        .addOnSuccessListener(aVoid2 -> callback.onSuccess())
+                        .addOnFailureListener(callback::onFailure))
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getUserFriends(String userId, DataCallback<List<User>> callback) {
+        usersRef.child(userId).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> friendIds = new ArrayList<>();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    friendIds.add(ds.getKey());
+                }
+
+                getAllUsers(new DataCallback<List<User>>() {
+                    @Override
+                    public void onSuccess(List<User> users) {
+                        List<User> friendUsers = new ArrayList<>();
+                        for (User u : users) {
+                            if (friendIds.contains(u.getUserId())) {
+                                friendUsers.add(u);
+                            }
+                        }
+                        callback.onSuccess(friendUsers);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailure(error.toException());
+            }
+        });
+    }
 
 
 
