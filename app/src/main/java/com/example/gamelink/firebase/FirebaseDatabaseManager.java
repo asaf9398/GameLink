@@ -337,6 +337,30 @@ public class FirebaseDatabaseManager {
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to add game", e));
     }
 
+    /**
+     * Fetch nickname of a user by userId (UID).
+     */
+    public void getNicknameByUserId(String userId, DataCallback<String> callback) {
+        usersRef.child(userId).child("nickname")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String nickname = snapshot.getValue(String.class);
+                        if (nickname != null) {
+                            callback.onSuccess(nickname);
+                        } else {
+                            callback.onFailure(new Exception("Nickname not found"));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callback.onFailure(error.toException());
+                    }
+                });
+    }
+
+
 
     // ==========================================
     // ========== Internal Classes ==============

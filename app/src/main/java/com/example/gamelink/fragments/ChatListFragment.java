@@ -31,8 +31,8 @@ public class ChatListFragment extends Fragment {
     private ChatListAdapter adapter;
     private List<Chat> chatList;
     private FirebaseDatabaseManager databaseManager;
-    // In a real app, get the user ID from FirebaseAuth
-    private String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+    private String currentUserNickname = null;
 
     @Nullable
     @Override
@@ -51,10 +51,22 @@ public class ChatListFragment extends Fragment {
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsRecyclerView.setAdapter(adapter);
 
-        loadUserChats();
+        // טען את הכינוי לפני טעינת הצ'אטים
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseManager.getNicknameByUserId(uid, new FirebaseDatabaseManager.DataCallback<String>() {
+            @Override
+            public void onSuccess(String nickname) {
+                currentUserNickname = nickname;
+                loadUserChats(); // נטען את הצ'אטים רק אחרי שיש כינוי
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(getContext(), "שגיאה בטעינת הכינוי", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         newChatFab.setOnClickListener(v -> {
-            // Launch CreateChatActivity to create a new chat
             Intent intent = new Intent(requireContext(), CreateChatActivity.class);
             startActivity(intent);
         });
@@ -65,11 +77,13 @@ public class ChatListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadUserChats();
+        if (currentUserNickname != null) {
+            loadUserChats();
+        }
     }
 
     private void loadUserChats() {
-        databaseManager.getUserChats(currentUserId, new FirebaseDatabaseManager.DataCallback<List<Chat>>() {
+        databaseManager.getUserChats(currentUserNickname, new FirebaseDatabaseManager.DataCallback<List<Chat>>() {
             @Override
             public void onSuccess(List<Chat> data) {
                 chatList.clear();
@@ -79,6 +93,7 @@ public class ChatListFragment extends Fragment {
                 }
                 adapter.notifyDataSetChanged();
             }
+
             @Override
             public void onFailure(Exception e) {
                 e.printStackTrace();

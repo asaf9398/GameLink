@@ -24,63 +24,74 @@ public class CreateChatActivity extends AppCompatActivity {
     private Button createChatButton;
     private FirebaseDatabaseManager databaseManager;
 
-    // Retrieve current user ID dynamically from FirebaseAuth
-    private String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String currentUserNickname = null; // במקום currentUserId
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_chat);
 
-        // Link UI elements
         chatNameEditText = findViewById(R.id.chat_name_edit_text);
         participantsEditText = findViewById(R.id.participants_edit_text);
         createChatButton = findViewById(R.id.create_chat_button);
 
         databaseManager = new FirebaseDatabaseManager();
 
+        // 1) נטען את ה־nickname של המשתמש הנוכחי
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseManager.getNicknameByUserId(uid, new FirebaseDatabaseManager.DataCallback<String>() {
+            @Override
+            public void onSuccess(String nickname) {
+                currentUserNickname = nickname;
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(CreateChatActivity.this, "שגיאה בטעינת הכינוי", Toast.LENGTH_SHORT).show();
+                finish(); // אפשרות: לא מאפשר יצירת צ'אט אם אין כינוי
+            }
+        });
+
         createChatButton.setOnClickListener(v -> {
             String chatName = chatNameEditText.getText().toString().trim();
             if (TextUtils.isEmpty(chatName)) {
-                Toast.makeText(this, "Please enter a chat name.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "נא להזין שם לצ'אט.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Generate a unique chat ID
+            if (currentUserNickname == null) {
+                Toast.makeText(this, "טעינת הכינוי עדיין נמשכת...", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String chatId = UUID.randomUUID().toString();
-
-            // Start with current user as a participant
             List<String> participants = new ArrayList<>();
-            participants.add(currentUserId);
+            participants.add(currentUserNickname); // הכינוי של המשתמש הנוכחי
 
-            // Read additional participants from the EditText (expecting a comma-separated list)
             String extraParticipantsText = participantsEditText.getText().toString().trim();
             if (!TextUtils.isEmpty(extraParticipantsText)) {
-                // Split by comma and trim each entry
                 String[] extraParticipants = extraParticipantsText.split(",");
                 for (String participant : extraParticipants) {
-                    String trimmedId = participant.trim();
-                    if (!TextUtils.isEmpty(trimmedId) && !participants.contains(trimmedId)) {
-                        participants.add(trimmedId);
+                    String trimmed = participant.trim();
+                    if (!TextUtils.isEmpty(trimmed) && !participants.contains(trimmed)) {
+                        participants.add(trimmed);
                     }
                 }
             }
 
-            // Create a new Chat object; here, we assume it's a private chat if there are only 2 participants,
-            // or a group chat if more than 2.
             boolean isGroup = participants.size() > 2;
             Chat chat = new Chat(chatId, chatName, isGroup, participants, "", System.currentTimeMillis());
 
-            // Add the chat to Firebase
             databaseManager.addChatObject(chat, new FirebaseDatabaseManager.OperationCallback() {
                 @Override
                 public void onSuccess() {
-                    Toast.makeText(CreateChatActivity.this, "Chat created successfully.", Toast.LENGTH_SHORT).show();
-                    finish(); // Return to the chat list or previous screen
+                    Toast.makeText(CreateChatActivity.this, "צ'אט נוצר בהצלחה", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
+
                 @Override
                 public void onFailure(Exception e) {
-                    Toast.makeText(CreateChatActivity.this, "Failed to create chat: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateChatActivity.this, "נכשל ביצירת הצ'אט: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         });
