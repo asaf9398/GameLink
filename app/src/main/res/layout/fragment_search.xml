@@ -5,75 +5,99 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/margin_medium"
+    android:background="@color/colorBackground">
 
-    <!-- כותרת למסך החיפוש -->
+    <!-- כותרת או טקסט הכוונה לחיפוש -->
     <TextView
         android:id="@+id/search_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Find Players"
-        android:textSize="20sp"
+        android:text="חיפוש שחקנים"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:textSize="20sp"
+        android:layout_marginBottom="@dimen/margin_medium"/>
 
-    <!-- בחירת משחק -->
+    <!-- שדה חיפוש לפי Nickname (כינוי) -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_game_text_input_layout"
+        android:id="@+id/search_nickname_text_input_layout"
+        style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Game"
-        android:layout_marginBottom="8dp">
+        android:hint="כינוי (Nickname)">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_nickname_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- שדה חיפוש לפי משחק -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_game_text_input_layout"
+        style="@style/Widget.GameLink.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="משחק"
+        android:layout_marginTop="@dimen/margin_small">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/search_game_autocomplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:minHeight="48dp"
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- בחירת ארץ -->
+    <!-- שדה חיפוש לפי מדינה -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_country_text_input_layout"
+        style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Country"
-        android:layout_marginBottom="8dp">
+        android:hint="מדינה"
+        android:layout_marginTop="@dimen/margin_small">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/search_country_autocomplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:minHeight="48dp"
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- כפתורי חיפוש/פילטרים -->
+    <!-- כפתורי חיפוש וסינון מתקדם -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginTop="@dimen/margin_medium">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/search_button"
+            style="@style/Widget.MaterialComponents.Button.FilledButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Search"
             android:layout_weight="1"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_height="wrap_content"
+            android:text="חפש" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/search_advanced_filter_button"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filters"/>
+            android:text="פילטרים" />
     </LinearLayout>
 
-    <!-- רשימת תוצאות החיפוש -->
+    <!-- רשימה של תוצאות החיפוש -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"
+        style="@style/MaterialRecyclerViewStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_small"
         android:layout_weight="1"/>
 
 </LinearLayout>

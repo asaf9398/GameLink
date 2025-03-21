@@ -1,69 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/margin_medium"
-    android:gravity="center_horizontal"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:padding="@dimen/margin_medium">
 
-    <TextView
-        android:id="@+id/register_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="הרשמה"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginBottom="@dimen/margin_medium"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.GameLink.TextInputLayout"
-        android:hint="אימייל">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.GameLink.TextInputLayout"
-        android:hint="סיסמה"
-        android:layout_marginTop="@dimen/margin_small">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/register_button"
-        style="@style/Widget.GameLink.Button"
-        android:text="הרשמה"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"/>
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_gravity="center"/>
+        <!-- כותרת ראשית למסך -->
+        <TextView
+            android:id="@+id/register_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="הרשמה"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="@dimen/margin_medium"/>
 
-    <TextView
-        android:id="@+id/login_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="כבר יש לך חשבון? התחבר כאן"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginTop="@dimen/margin_small"
-        android:gravity="center"/>
+        <!-- שדה הזנת כינוי (Nickname) -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.GameLink.TextInputLayout"
+            android:hint="כינוי (Nickname)"
+            android:layout_marginBottom="@dimen/margin_small">
 
-</LinearLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- שדה הזנת אימייל -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.GameLink.TextInputLayout"
+            android:hint="אימייל">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- שדה הזנת סיסמה -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.GameLink.TextInputLayout"
+            android:hint="סיסמה"
+            android:layout_marginTop="@dimen/margin_small">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- כפתור הרשמה -->
+        <Button
+            android:id="@+id/register_button"
+            style="@style/Widget.GameLink.Button"
+            android:text="הרשמה"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"/>
+
+        <!-- ProgressBar -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_gravity="center"/>
+
+        <!-- טקסט/כפתור מעבר להתחברות -->
+        <TextView
+            android:id="@+id/login_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="כבר יש לך חשבון? התחבר כאן"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center"/>
+    </LinearLayout>
+</ScrollView>

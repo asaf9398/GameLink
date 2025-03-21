@@ -34,7 +34,10 @@
 		<activity android:name=".activities.RegisterActivity" android:exported="true"/>
 
 		<activity android:name=".activities.FavoriteGamesActivity"/>
-		
-    </application>
+		<activity android:name=".activities.CreateChatActivity"
+			android:exported="true" />
+
+
+	</application>
 
 </manifest>

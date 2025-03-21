@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Checkbox to choose if the chat is a group chat -->
+        <CheckBox
+            android:id="@+id/group_chat_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Group Chat" />
+
+        <!-- Chat Name (visible only for group chats) -->
+        <EditText
+            android:id="@+id/chat_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Chat Name (for group chat)"
+            android:layout_marginTop="8dp" />
+
+        <!-- Participants: Enter user IDs separated by commas -->
+        <EditText
+            android:id="@+id/participants_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter participant user IDs, separated by commas"
+            android:layout_marginTop="8dp" />
+
+        <!-- Button to create the chat -->
+        <Button
+            android:id="@+id/create_chat_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Chat"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

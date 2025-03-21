@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_small">
+
+    <!-- בועת טקסט משמאל -->
+    <TextView
+        android:id="@+id/message_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="@drawable/bg_bubble_outgoing"
+        android:padding="@dimen/margin_small"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_medium" />
+
+    <!-- תאריך/שעה -->
+    <TextView
+        android:id="@+id/message_time_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="2dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_small" />
+</LinearLayout>

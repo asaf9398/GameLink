@@ -18,6 +18,7 @@ import com.example.gamelink.firebase.FirebaseDatabaseManager;
 import com.example.gamelink.models.User;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -25,10 +26,14 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
 
+    // נוסיף TextInputLayout/TextInputEditText עבור Nickname:
+    private TextInputLayout nicknameTextInputLayout;
+    private TextInputEditText nicknameEditText; // אפשר גם MaterialAutoCompleteTextView אך בדר"כ Nickname הוא חופשי
+
     private TextInputLayout gameTextInputLayout, countryTextInputLayout;
     private MaterialAutoCompleteTextView gameAutoCompleteTextView, countryAutoCompleteTextView;
     private MaterialButton searchButton, advancedFilterButton;
-    private RecyclerView searchRecyclerView; // <--- RecyclerView במקום MaterialRecyclerView
+    private RecyclerView searchRecyclerView;
 
     private UserAdapter userAdapter;
     private List<User> searchResults;
@@ -42,77 +47,117 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        // קישור לרכיבי ה־XML
-        gameTextInputLayout = view.findViewById(R.id.search_game_text_input_layout);
-        countryTextInputLayout = view.findViewById(R.id.search_country_text_input_layout);
+        // 1) קישור לרכיבי ה־XML
+        nicknameTextInputLayout   = view.findViewById(R.id.search_nickname_text_input_layout);
+        nicknameEditText          = view.findViewById(R.id.search_nickname_edit_text);
 
-        gameAutoCompleteTextView = view.findViewById(R.id.search_game_autocomplete);
+        gameTextInputLayout       = view.findViewById(R.id.search_game_text_input_layout);
+        gameAutoCompleteTextView  = view.findViewById(R.id.search_game_autocomplete);
+
+        countryTextInputLayout    = view.findViewById(R.id.search_country_text_input_layout);
         countryAutoCompleteTextView = view.findViewById(R.id.search_country_autocomplete);
 
-        searchButton = view.findViewById(R.id.search_button);
-        advancedFilterButton = view.findViewById(R.id.search_advanced_filter_button);
+        searchButton              = view.findViewById(R.id.search_button);
+        advancedFilterButton      = view.findViewById(R.id.search_advanced_filter_button);
+        searchRecyclerView        = view.findViewById(R.id.search_recycler_view);
 
-        // שים לב: השתמש ב־androidx.recyclerview.widget.RecyclerView במקום MaterialRecyclerView
-        searchRecyclerView = view.findViewById(R.id.search_recycler_view);
-
-        // אתחול אובייקטים
+        // 2) אתחול אובייקטים
         databaseManager = new FirebaseDatabaseManager();
-        searchResults = new ArrayList<>();
-        userAdapter = new UserAdapter(searchResults);
+        searchResults   = new ArrayList<>();
+        userAdapter     = new UserAdapter(searchResults);
 
-        // הגדרת ריסייקלר:
+        // 3) הגדרת LayoutManager לריסייקלר, וקישור ה־Adapter
         searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         searchRecyclerView.setAdapter(userAdapter);
 
-        // הגדרת נתונים ל־AutoComplete
+        // 4) טוענים נתונים ראשוניים לאוטוקומפליט
         setupAutoCompleteData();
 
-        // מאזין לכפתור חיפוש
+        // 5) מאזין לכפתור חיפוש
         searchButton.setOnClickListener(v -> {
-            String game = gameAutoCompleteTextView.getText().toString().trim();
-            String country = countryAutoCompleteTextView.getText().toString().trim();
-            performSearch(game, country);
+            String nickname = nicknameEditText.getText().toString().trim(); // <--- ניק ניים
+            String game     = gameAutoCompleteTextView.getText().toString().trim();
+            String country  = countryAutoCompleteTextView.getText().toString().trim();
+
+            performSearch(nickname, game, country);
         });
 
-        // מאזין לכפתור פילטרים
+        // 6) מאזין לכפתור פילטרים מתקדמים (כאן רק Toast להדגמה)
         advancedFilterButton.setOnClickListener(v -> {
-            // כאן אפשר לפתוח bottom sheet / מסך נוסף לסינון מתקדם
             Toast.makeText(getContext(), "Open advanced filters (not implemented)", Toast.LENGTH_SHORT).show();
         });
 
         return view;
     }
 
+    /**
+     * לדוגמה: הגדרת רשימת משחקים ומדינות עבור ה-AutoComplete
+     */
     private void setupAutoCompleteData() {
-        // דוגמה לטעינת רשימת משחקים מוכרים ורשימת ארצות
-        String[] popularGames = {"Chess", "Fortnite", "Overwatch", "League of Legends"};
-        String[] countries = {"Israel", "USA", "Canada", "France", "Germany"};
+        // לדוגמה רשימות מוצעות
+        String[] popularGames = { "Chess", "Fortnite", "Overwatch", "League of Legends" };
+        String[] countries    = { "Israel", "USA", "Canada", "France", "Germany" };
 
-        // משתמשים ב־MaterialAutoCompleteTextView כדי להציג אפשרויות:
+        // הגדרת האפשרויות ב-AutoCompleteTextView
         gameAutoCompleteTextView.setSimpleItems(popularGames);
         countryAutoCompleteTextView.setSimpleItems(countries);
     }
 
-    private void performSearch(String game, String country) {
+    /**
+     * פונקציית חיפוש לפי Nickname, Game, ו-Country.
+     * אם אחד הפרמטרים ריק, נתעלם ממנו; כלומר נעשה חיפוש גמיש.
+     */
+    private void performSearch(String nickname, String game, String country) {
         databaseManager.getAllUsers(new FirebaseDatabaseManager.DataCallback<List<User>>() {
             @Override
             public void onSuccess(List<User> users) {
                 searchResults.clear();
-                for (User user : users) {
-                    if (user.getFavoriteGames() == null) continue;
-                    if (user.getFavoriteGames().contains(game) &&
-                            user.getCountry() != null &&
-                            user.getCountry().equalsIgnoreCase(country)) {
 
+                for (User user : users) {
+                    // דילוג אם אין FavoriteGames
+                    if (user.getFavoriteGames() == null) {
+                        user.setFavoriteGames(new ArrayList<>());
+                    }
+
+                    // תנאי ניק ניים (נניח, אם משאירים ריק - לא בודקים)
+                    boolean matchNickname = true;
+                    if (!nickname.isEmpty()) {
+                        // כאן מניחים שיש שדה nickname ב-User, או שהוא משתמש ב-getName() בתור nickname
+                        // לדוגמה נניח ש-user.getName() הוא ה-nickname
+                        if (user.getName() == null || !user.getName().equalsIgnoreCase(nickname)) {
+                            matchNickname = false;
+                        }
+                    }
+
+                    // תנאי משחק
+                    boolean matchGame = true;
+                    if (!game.isEmpty()) {
+                        if (!user.getFavoriteGames().contains(game)) {
+                            matchGame = false;
+                        }
+                    }
+
+                    // תנאי מדינה
+                    boolean matchCountry = true;
+                    if (!country.isEmpty()) {
+                        if (user.getCountry() == null || !user.getCountry().equalsIgnoreCase(country)) {
+                            matchCountry = false;
+                        }
+                    }
+
+                    // אם כל התנאים רלוונטיים ומתקיימים
+                    if (matchNickname && matchGame && matchCountry) {
                         searchResults.add(user);
                     }
                 }
+
                 userAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Exception e) {
                 e.printStackTrace();
+                Toast.makeText(getContext(), "נכשלה טעינת המשתמשים", Toast.LENGTH_SHORT).show();
             }
         });
     }
