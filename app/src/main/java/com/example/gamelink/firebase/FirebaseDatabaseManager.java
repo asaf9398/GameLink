@@ -82,7 +82,7 @@ public class FirebaseDatabaseManager {
                         try {
                             // Extract user fields
                             String userId   = userSnapshot.child("userId").getValue(String.class);
-                            String name     = userSnapshot.child("name").getValue(String.class);
+                            //String name     = userSnapshot.child("name").getValue(String.class);
                             String nickname = userSnapshot.child("nickname").getValue(String.class);
 
                             Integer ageVal  = userSnapshot.child("age").getValue(Integer.class);
@@ -105,7 +105,7 @@ public class FirebaseDatabaseManager {
                             }
 
                             // Create the user object
-                            User user = new User(userId, name, nickname, age, country, favoriteGames);
+                            User user = new User(userId, nickname, age, country, favoriteGames);
                             users.add(user);
 
                         } catch (Exception e) {

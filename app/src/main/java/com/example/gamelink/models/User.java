@@ -4,21 +4,16 @@ import java.util.List;
 
 public class User {
     private String userId;
-    private String name;
-    private String nickname;   // *** ADDED: כינוי
+    private String name; // משמש ל־nickname
     private int age;
     private String country;
     private List<String> favoriteGames;
 
-    public User() {
-        // Default constructor required for Firebase
-    }
+    public User() {} // דרוש לפיירבייס
 
-    // *** Constructor מלא כולל nickname
-    public User(String userId, String name, String nickname, int age, String country, List<String> favoriteGames) {
+    public User(String userId, String name, int age, String country, List<String> favoriteGames) {
         this.userId = userId;
         this.name = name;
-        this.nickname = nickname;
         this.age = age;
         this.country = country;
         this.favoriteGames = favoriteGames;
@@ -42,10 +37,10 @@ public class User {
 
     // *** GET/SET nickname
     public String getNickname() {
-        return nickname;
+        return name;
     }
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.name = nickname;
     }
 
     public int getAge() {
