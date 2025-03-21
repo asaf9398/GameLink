@@ -9,13 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <!-- Checkbox to choose if the chat is a group chat -->
-        <CheckBox
-            android:id="@+id/group_chat_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Group Chat" />
+        
 
         <!-- Chat Name (visible only for group chats) -->
         <EditText
