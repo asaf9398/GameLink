@@ -27,6 +27,8 @@
         <!-- שדה הזנת כינוי (Nickname) -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.GameLink.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="כינוי (Nickname)"
             android:layout_marginBottom="@dimen/margin_small">
 
@@ -40,6 +42,8 @@
         <!-- שדה הזנת אימייל -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.GameLink.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="אימייל">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -52,6 +56,8 @@
         <!-- שדה הזנת סיסמה -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.GameLink.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="סיסמה"
             android:layout_marginTop="@dimen/margin_small">
 
@@ -66,9 +72,9 @@
         <Button
             android:id="@+id/register_button"
             style="@style/Widget.GameLink.Button"
-            android:text="הרשמה"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="הרשמה"
             android:layout_marginTop="@dimen/margin_medium"/>
 
         <!-- ProgressBar -->
