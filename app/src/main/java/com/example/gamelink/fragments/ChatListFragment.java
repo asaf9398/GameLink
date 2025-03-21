@@ -19,6 +19,7 @@ import com.example.gamelink.adapters.ChatListAdapter;
 import com.example.gamelink.firebase.FirebaseDatabaseManager;
 import com.example.gamelink.models.Chat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ChatListFragment extends Fragment {
     private List<Chat> chatList;
     private FirebaseDatabaseManager databaseManager;
     // In a real app, get the user ID from FirebaseAuth
-    private String currentUserId = "exampleUserId";
+    private String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     @Nullable
     @Override
