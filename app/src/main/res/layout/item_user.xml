@@ -15,7 +15,6 @@
         android:padding="@dimen/margin_small"
         android:gravity="center_vertical">
 
-        <!-- תוכן טקסטואלי -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -39,15 +38,14 @@
                 android:layout_marginTop="@dimen/margin_small"/>
         </LinearLayout>
 
-        <!-- כפתור הוספת חבר -->
         <ImageButton
             android:id="@+id/add_friend_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Add Friend"
-			android:src="@android:drawable/ic_input_add"
+            android:contentDescription="Add or Remove Friend"
+            android:src="@android:drawable/ic_input_add"
             android:tint="@color/colorPrimary"/>
 
     </LinearLayout>

@@ -26,7 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ProfileFragment extends Fragment {
 
@@ -34,8 +36,10 @@ public class ProfileFragment extends Fragment {
     private MaterialTextView nameTextView, emailTextView, ratingTextView;
     private MaterialButton logoutButton, favoriteGamesButton, editProfileButton;
     private RecyclerView friendsRecyclerView;
+
     private UserAdapter friendsAdapter;
     private List<User> friendsList;
+    private Set<String> friendsIdSet;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabaseManager databaseManager;
@@ -58,13 +62,14 @@ public class ProfileFragment extends Fragment {
         favoriteGamesButton  = view.findViewById(R.id.profile_favorite_games_button);
         editProfileButton    = view.findViewById(R.id.profile_edit_button);
 
-        // אתחול אובייקטים
+        // אתחול
         mAuth = FirebaseAuth.getInstance();
         databaseManager = new FirebaseDatabaseManager();
         friendsList = new ArrayList<>();
+        friendsIdSet = new HashSet<>();
 
-        // אתחול RecyclerView
-        friendsAdapter = new UserAdapter(friendsList, null); // בפרופיל לא מוסיפים חברים
+        // אתחול אדפטר – בפרופיל לא מבצעים פעולה על חברים ולכן listener=null
+        friendsAdapter = new UserAdapter(friendsList, friendsIdSet, null);
         friendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         friendsRecyclerView.setAdapter(friendsAdapter);
 
@@ -95,7 +100,13 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onSuccess(List<User> data) {
                     friendsList.clear();
-                    friendsList.addAll(data);
+                    friendsIdSet.clear();
+                    for (User friend : data) {
+                        if (friend.getUserId() != null) {
+                            friendsList.add(friend);
+                            friendsIdSet.add(friend.getUserId());
+                        }
+                    }
                     friendsAdapter.notifyDataSetChanged();
                 }
 

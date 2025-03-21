@@ -23,7 +23,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SearchFragment extends Fragment {
 
@@ -36,8 +38,8 @@ public class SearchFragment extends Fragment {
 
     private UserAdapter userAdapter;
     private List<User> searchResults;
+    private Set<String> currentFriends;
     private FirebaseDatabaseManager databaseManager;
-
     private String currentUserId;
 
     @Nullable
@@ -48,6 +50,7 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+        // קישור לרכיבי עיצוב
         nicknameTextInputLayout     = view.findViewById(R.id.search_nickname_text_input_layout);
         nicknameEditText            = view.findViewById(R.id.search_nickname_edit_text);
         gameTextInputLayout         = view.findViewById(R.id.search_game_text_input_layout);
@@ -58,42 +61,66 @@ public class SearchFragment extends Fragment {
         advancedFilterButton        = view.findViewById(R.id.search_advanced_filter_button);
         searchRecyclerView          = view.findViewById(R.id.search_recycler_view);
 
+        // אתחולים
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         databaseManager = new FirebaseDatabaseManager();
         searchResults = new ArrayList<>();
+        currentFriends = new HashSet<>();
 
-        userAdapter = new UserAdapter(searchResults, user -> {
-            // הוספת חבר לשני הצדדים עם callback
-            databaseManager.addFriend(currentUserId, user.getUserId(), new FirebaseDatabaseManager.OperationCallback() {
-                @Override
-                public void onSuccess() {
-                    // אין צורך להודיע פעמיים
-                }
+        // אתחול אדפטר עם מאזין לפעולות
+        userAdapter = new UserAdapter(searchResults, currentFriends, new UserAdapter.OnUserActionListener() {
+            @Override
+            public void onAddFriend(User user) {
+                String userId = user.getUserId();
 
-                @Override
-                public void onFailure(Exception e) {
-                    Toast.makeText(getContext(), "שגיאה בהוספת חבר", Toast.LENGTH_SHORT).show();
-                }
-            });
+                // הוספה למשתמש הנוכחי
+                databaseManager.addFriend(currentUserId, userId, new FirebaseDatabaseManager.OperationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        currentFriends.add(userId);
+                        userAdapter.notifyDataSetChanged();
+                        Toast.makeText(getContext(), user.getNickname() + " נוסף לרשימת החברים שלך!", Toast.LENGTH_SHORT).show();
+                    }
 
-            databaseManager.addFriend(user.getUserId(), currentUserId, new FirebaseDatabaseManager.OperationCallback() {
-                @Override
-                public void onSuccess() {
-                    Toast.makeText(getContext(), user.getNickname() + " נוסף לרשימת החברים שלך!", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(getContext(), "שגיאה בהוספת חבר", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-                @Override
-                public void onFailure(Exception e) {
-                    Toast.makeText(getContext(), "שגיאה בהוספת חבר", Toast.LENGTH_SHORT).show();
-                }
-            });
+                // הוספה הדדית (בלי callback)
+                databaseManager.addFriend(userId, currentUserId, null);
+            }
+
+            @Override
+            public void onRemoveFriend(User user) {
+                String userId = user.getUserId();
+
+                // הסרה מהמשתמש הנוכחי
+                databaseManager.removeFriend(currentUserId, userId, new FirebaseDatabaseManager.OperationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        currentFriends.remove(userId);
+                        userAdapter.notifyDataSetChanged();
+                        Toast.makeText(getContext(), user.getNickname() + " הוסר מרשימת החברים שלך", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(getContext(), "שגיאה בהסרת חבר", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // הסרה הדדית (בלי callback)
+                databaseManager.removeFriend(userId, currentUserId, null);
+            }
         });
 
         searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         searchRecyclerView.setAdapter(userAdapter);
 
         setupAutoCompleteData();
+        loadCurrentFriends();
 
         searchButton.setOnClickListener(v -> {
             String nickname = nicknameEditText.getText().toString().trim();
@@ -115,6 +142,22 @@ public class SearchFragment extends Fragment {
 
         gameAutoCompleteTextView.setSimpleItems(popularGames);
         countryAutoCompleteTextView.setSimpleItems(countries);
+    }
+
+    private void loadCurrentFriends() {
+        databaseManager.getUserFriendIds(currentUserId, new FirebaseDatabaseManager.DataCallback<List<String>>() {
+            @Override
+            public void onSuccess(List<String> data) {
+                currentFriends.clear();
+                currentFriends.addAll(data);
+                userAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(getContext(), "נכשלה טעינת רשימת החברים", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void performSearch(String nickname, String game, String country) {

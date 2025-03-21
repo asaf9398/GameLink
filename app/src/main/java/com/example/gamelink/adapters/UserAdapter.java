@@ -12,22 +12,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gamelink.R;
 import com.example.gamelink.models.User;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
     public interface OnUserActionListener {
         void onAddFriend(User user);
+        void onRemoveFriend(User user);
     }
 
     private final List<User> users;
+    private final Set<String> currentFriendsIds;
     private final OnUserActionListener listener;
 
-    public UserAdapter(List<User> users, OnUserActionListener listener) {
+    public UserAdapter(List<User> users, Set<String> currentFriendsIds, OnUserActionListener listener) {
         this.users = users;
+        this.currentFriendsIds = currentFriendsIds != null ? currentFriendsIds : new HashSet<>();
         this.listener = listener;
     }
-
 
     @NonNull
     @Override
@@ -42,10 +46,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.userNameTextView.setText(user.getNickname());
         holder.userCountryTextView.setText(user.getCountry());
 
+        boolean isFriend = currentFriendsIds.contains(user.getUserId());
+
+        holder.addFriendButton.setImageResource(
+                isFriend ? android.R.drawable.ic_delete : android.R.drawable.ic_input_add
+        );
+
         holder.addFriendButton.setOnClickListener(v -> {
-            if (listener != null) {
+            if (listener == null) return;
+
+            if (isFriend) {
+                listener.onRemoveFriend(user);
+                currentFriendsIds.remove(user.getUserId());
+            } else {
                 listener.onAddFriend(user);
+                currentFriendsIds.add(user.getUserId());
             }
+            notifyItemChanged(position);
         });
     }
 

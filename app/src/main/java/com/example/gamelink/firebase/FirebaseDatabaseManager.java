@@ -446,6 +446,44 @@ public class FirebaseDatabaseManager {
         });
     }
 
+    public void getUserFriendIds(String userId, DataCallback<List<String>> callback) {
+        DatabaseReference friendsRef = usersRef.child(userId).child("friends");
+        friendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> ids = new ArrayList<>();
+                for (DataSnapshot friendSnap : snapshot.getChildren()) {
+                    //if (friendSnap.getValue(android.R.bool.class))
+                    //ids.add();
+                }
+                callback.onSuccess(ids);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailure(error.toException());
+            }
+        });
+    }
+
+    public void removeFriend(String userId, String friendId, OperationCallback callback) {
+        usersRef.child(userId).child("friends").orderByValue().equalTo(friendId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot snap : snapshot.getChildren()) {
+                            snap.getRef().removeValue();
+                        }
+                        callback.onSuccess();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callback.onFailure(error.toException());
+                    }
+                });
+    }
+
 
 
 

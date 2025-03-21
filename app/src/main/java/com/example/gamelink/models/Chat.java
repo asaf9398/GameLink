@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import com.google.firebase.database.Exclude;
+
 
 /**
  * Represents a Chat/Conversation room.
@@ -76,9 +78,11 @@ public class Chat {
     /**
      * Format lastMessageTime for display (e.g. "03/20 15:42").
      */
+    @Exclude
     public String getFormattedLastMessageTime() {
         if (lastMessageTime == 0) return "";
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm", Locale.getDefault());
         return sdf.format(new Date(lastMessageTime));
     }
+
 }
