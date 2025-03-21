@@ -39,6 +39,7 @@
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <!-- שדה הזנת אימייל -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.GameLink.TextInputLayout"
