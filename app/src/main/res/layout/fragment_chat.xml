@@ -18,10 +18,11 @@
 
         <!-- כותרת צ'אט או שם משתמש -->
         <TextView
+		    android:id="@+id/chat_title"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Chat with XYZ"
+            android:text="Chat with "
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="18sp"

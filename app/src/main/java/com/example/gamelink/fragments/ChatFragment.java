@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,6 +24,7 @@ import com.example.gamelink.R;
 import com.example.gamelink.adapters.ChatAdapter;
 import com.example.gamelink.firebase.FirebaseDatabaseManager;
 import com.example.gamelink.firebase.FirebaseStorageManager;
+import com.example.gamelink.models.Chat;
 import com.example.gamelink.models.Message;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,7 +38,7 @@ public class ChatFragment extends Fragment {
     private RecyclerView chatRecyclerView;
     private TextInputEditText messageEditText;
     private ImageButton sendButton, attachButton, infoButton;
-
+    private TextView chatTitle;
     private ChatAdapter chatAdapter;
     private List<Message> messages;
     private FirebaseDatabaseManager databaseManager;
@@ -45,7 +47,6 @@ public class ChatFragment extends Fragment {
     private String chatId;
     private String currentUserId;
 
-    // Factory method for creating a ChatFragment with a given chatId
     public static ChatFragment newInstance(String chatId) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
@@ -57,13 +58,9 @@ public class ChatFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Retrieve the chatId from arguments
         if (getArguments() != null) {
             chatId = getArguments().getString(ARG_CHAT_ID, "unknown_chat_id");
-        } else {
-            chatId = "example_chat_id";
         }
-        // For real usage, get current user from FirebaseAuth
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         } else {
@@ -83,6 +80,7 @@ public class ChatFragment extends Fragment {
         messageEditText  = view.findViewById(R.id.chat_message_edit_text);
         sendButton       = view.findViewById(R.id.chat_send_button);
         attachButton     = view.findViewById(R.id.chat_attach_button);
+        chatTitle        = view.findViewById(R.id.chat_title);
 
         databaseManager = new FirebaseDatabaseManager();
         storageManager  = new FirebaseStorageManager();
@@ -91,22 +89,36 @@ public class ChatFragment extends Fragment {
         chatAdapter = new ChatAdapter(messages, currentUserId);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setStackFromEnd(true); // Start list from bottom
+        layoutManager.setStackFromEnd(true);
         chatRecyclerView.setLayoutManager(layoutManager);
         chatRecyclerView.setAdapter(chatAdapter);
 
+        loadChatTitleWithParticipants(); // <<--- כאן קוראים לפונקציה החדשה
         loadMessages();
 
         sendButton.setOnClickListener(v -> sendMessage());
-
         attachButton.setOnClickListener(v -> pickFileFromStorage());
-
-        infoButton.setOnClickListener(v -> {
-            // Info / back / profile
-            Toast.makeText(getContext(), "Show chat info or go back", Toast.LENGTH_SHORT).show();
-        });
+        infoButton.setOnClickListener(v -> Toast.makeText(getContext(), "Show chat info", Toast.LENGTH_SHORT).show());
 
         return view;
+    }
+
+    private void loadChatTitleWithParticipants() {
+        databaseManager.getChatParticipantNicknames(chatId, new FirebaseDatabaseManager.DataCallback<List<String>>() {
+            @Override
+            public void onSuccess(List<String> nicknames) {
+                if (getActivity() != null && chatTitle != null) {
+                    String title = "Chat with: " + String.join(", ", nicknames);
+                    chatTitle.setText(title);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                chatTitle.setText("Chat");
+                Toast.makeText(getContext(), "Failed to load participants", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadMessages() {
@@ -140,14 +152,13 @@ public class ChatFragment extends Fragment {
             messages.add(newMsg);
             chatAdapter.notifyItemInserted(messages.size() - 1);
             chatRecyclerView.scrollToPosition(messages.size() - 1);
-
             messageEditText.setText("");
         }
     }
 
     private void pickFileFromStorage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");  // Could limit to images with "image/*"
+        intent.setType("*/*");
         filePickerLauncher.launch(intent);
     }
 

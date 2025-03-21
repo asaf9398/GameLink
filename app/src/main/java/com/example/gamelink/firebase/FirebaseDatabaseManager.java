@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Manages operations with Firebase Realtime Database, including users, games, messages, and chats.
@@ -359,6 +360,50 @@ public class FirebaseDatabaseManager {
                     }
                 });
     }
+
+    public void getChatParticipantNicknames(String chatId, DataCallback<List<String>> callback) {
+        chatsRef.child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Chat chat = snapshot.getValue(Chat.class);
+                if (chat == null || chat.getParticipants() == null) {
+                    callback.onFailure(new Exception("No chat or participants"));
+                    return;
+                }
+
+                List<String> uids = chat.getParticipants();
+                List<String> nicknames = new ArrayList<>();
+                AtomicInteger count = new AtomicInteger(uids.size());
+
+                for (String uid : uids) {
+                    usersRef.child(uid).child("nickname").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot ds) {
+                            String nickname = ds.getValue(String.class);
+                            nicknames.add(nickname != null ? nickname : uid);
+                            if (count.decrementAndGet() == 0) {
+                                callback.onSuccess(nicknames);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            if (count.decrementAndGet() == 0) {
+                                callback.onSuccess(nicknames); // return what we got
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailure(error.toException());
+            }
+        });
+    }
+
+
 
 
 
