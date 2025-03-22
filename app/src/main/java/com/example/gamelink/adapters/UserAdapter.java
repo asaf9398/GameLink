@@ -21,6 +21,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public interface OnUserActionListener {
         void onAddFriend(User user);
         void onRemoveFriend(User user);
+        void onViewProfile(User user);
     }
 
     private final List<User> users;

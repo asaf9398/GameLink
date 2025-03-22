@@ -1,5 +1,6 @@
 package com.example.gamelink.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamelink.R;
+import com.example.gamelink.activities.UserProfileActivity;
 import com.example.gamelink.adapters.UserAdapter;
 import com.example.gamelink.firebase.FirebaseDatabaseManager;
 import com.example.gamelink.models.User;
@@ -29,9 +31,7 @@ import java.util.Set;
 
 public class SearchFragment extends Fragment {
 
-    private TextInputLayout nicknameTextInputLayout;
     private TextInputEditText nicknameEditText;
-    private TextInputLayout gameTextInputLayout, countryTextInputLayout;
     private MaterialAutoCompleteTextView gameAutoCompleteTextView, countryAutoCompleteTextView;
     private MaterialButton searchButton, advancedFilterButton;
     private RecyclerView searchRecyclerView;
@@ -50,30 +50,22 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        // קישור לרכיבי עיצוב
-        nicknameTextInputLayout     = view.findViewById(R.id.search_nickname_text_input_layout);
-        nicknameEditText            = view.findViewById(R.id.search_nickname_edit_text);
-        gameTextInputLayout         = view.findViewById(R.id.search_game_text_input_layout);
-        gameAutoCompleteTextView    = view.findViewById(R.id.search_game_autocomplete);
-        countryTextInputLayout      = view.findViewById(R.id.search_country_text_input_layout);
+        nicknameEditText = view.findViewById(R.id.search_nickname_edit_text);
+        gameAutoCompleteTextView = view.findViewById(R.id.search_game_autocomplete);
         countryAutoCompleteTextView = view.findViewById(R.id.search_country_autocomplete);
-        searchButton                = view.findViewById(R.id.search_button);
-        advancedFilterButton        = view.findViewById(R.id.search_advanced_filter_button);
-        searchRecyclerView          = view.findViewById(R.id.search_recycler_view);
+        searchButton = view.findViewById(R.id.search_button);
+        advancedFilterButton = view.findViewById(R.id.search_advanced_filter_button);
+        searchRecyclerView = view.findViewById(R.id.search_recycler_view);
 
-        // אתחולים
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseManager = new FirebaseDatabaseManager();
         searchResults = new ArrayList<>();
         currentFriends = new HashSet<>();
 
-        // אתחול אדפטר עם מאזין לפעולות
         userAdapter = new UserAdapter(searchResults, currentFriends, new UserAdapter.OnUserActionListener() {
             @Override
             public void onAddFriend(User user) {
                 String userId = user.getUserId();
-
-                // הוספה למשתמש הנוכחי
                 databaseManager.addFriend(currentUserId, userId, new FirebaseDatabaseManager.OperationCallback() {
                     @Override
                     public void onSuccess() {
@@ -88,15 +80,12 @@ public class SearchFragment extends Fragment {
                     }
                 });
 
-                // הוספה הדדית (בלי callback)
                 databaseManager.addFriend(userId, currentUserId, null);
             }
 
             @Override
             public void onRemoveFriend(User user) {
                 String userId = user.getUserId();
-
-                // הסרה מהמשתמש הנוכחי
                 databaseManager.removeFriend(currentUserId, userId, new FirebaseDatabaseManager.OperationCallback() {
                     @Override
                     public void onSuccess() {
@@ -111,8 +100,15 @@ public class SearchFragment extends Fragment {
                     }
                 });
 
-                // הסרה הדדית (בלי callback)
                 databaseManager.removeFriend(userId, currentUserId, null);
+            }
+
+
+            @Override
+            public void onUserClicked(User user) {
+                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                intent.putExtra("userId", user.getUserId());
+                startActivity(intent);
             }
         });
 
@@ -130,8 +126,7 @@ public class SearchFragment extends Fragment {
         });
 
         advancedFilterButton.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Open advanced filters (not implemented)", Toast.LENGTH_SHORT).show()
-        );
+                Toast.makeText(getContext(), "Open advanced filters (not implemented)", Toast.LENGTH_SHORT).show());
 
         return view;
     }
@@ -169,14 +164,14 @@ public class SearchFragment extends Fragment {
                 for (User user : users) {
                     if (user.getUserId() == null || user.getUserId().equals(currentUserId)) continue;
 
-                    boolean matchNickname = nickname.isEmpty() ||
-                            (user.getNickname() != null && user.getNickname().equalsIgnoreCase(nickname));
+                    boolean matchNickname = nickname.isEmpty() || (user.getNickname() != null &&
+                            user.getNickname().toLowerCase().contains(nickname.toLowerCase()));
 
-                    boolean matchGame = game.isEmpty() ||
-                            (user.getFavoriteGames() != null && user.getFavoriteGames().contains(game));
+                    boolean matchGame = game.isEmpty() || (user.getFavoriteGames() != null &&
+                            user.getFavoriteGames().contains(game));
 
-                    boolean matchCountry = country.isEmpty() ||
-                            (user.getCountry() != null && user.getCountry().equalsIgnoreCase(country));
+                    boolean matchCountry = country.isEmpty() || (user.getCountry() != null &&
+                            user.getCountry().equalsIgnoreCase(country));
 
                     if (matchNickname && matchGame && matchCountry) {
                         searchResults.add(user);
@@ -188,7 +183,6 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                e.printStackTrace();
                 Toast.makeText(getContext(), "נכשלה טעינת המשתמשים", Toast.LENGTH_SHORT).show();
             }
         });

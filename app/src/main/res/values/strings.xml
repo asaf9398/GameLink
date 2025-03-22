@@ -13,6 +13,7 @@
     <string name="profile_email">Email</string>
     <string name="profile_button_logout">Logout</string>
     <string name="profile_button_favorites">Favorite Games</string>
+	<string name="profile_image">Profile Image</string>
 
     <!-- Search -->
     <string name="search_title">Search Players</string>

@@ -406,10 +406,17 @@ public class FirebaseDatabaseManager {
     public void addFriend(String userId, String friendId, OperationCallback callback) {
         usersRef.child(userId).child("friends").child(friendId).setValue(true)
                 .addOnSuccessListener(aVoid -> usersRef.child(friendId).child("friends").child(userId).setValue(true)
-                        .addOnSuccessListener(aVoid2 -> callback.onSuccess())
-                        .addOnFailureListener(callback::onFailure))
-                .addOnFailureListener(callback::onFailure);
+                        .addOnSuccessListener(aVoid2 -> {
+                            if (callback != null) callback.onSuccess();
+                        })
+                        .addOnFailureListener(e -> {
+                            if (callback != null) callback.onFailure(e);
+                        }))
+                .addOnFailureListener(e -> {
+                    if (callback != null) callback.onFailure(e);
+                });
     }
+
 
     public void getUserFriends(String userId, DataCallback<List<User>> callback) {
         usersRef.child(userId).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -453,8 +460,7 @@ public class FirebaseDatabaseManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<String> ids = new ArrayList<>();
                 for (DataSnapshot friendSnap : snapshot.getChildren()) {
-                    //if (friendSnap.getValue(android.R.bool.class))
-                    //ids.add();
+                    ids.add(friendSnap.getKey());  // <-- זה הפתרון הנכון!
                 }
                 callback.onSuccess(ids);
             }
@@ -466,23 +472,25 @@ public class FirebaseDatabaseManager {
         });
     }
 
-    public void removeFriend(String userId, String friendId, OperationCallback callback) {
-        usersRef.child(userId).child("friends").orderByValue().equalTo(friendId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot snap : snapshot.getChildren()) {
-                            snap.getRef().removeValue();
-                        }
-                        callback.onSuccess();
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        callback.onFailure(error.toException());
-                    }
+    public void removeFriend(String userId, String friendId, OperationCallback callback) {
+        // Remove from user's list
+        usersRef.child(userId).child("friends").child(friendId).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    // Remove from friend's list
+                    usersRef.child(friendId).child("friends").child(userId).removeValue()
+                            .addOnSuccessListener(aVoid2 -> {
+                                if (callback != null) callback.onSuccess();
+                            })
+                            .addOnFailureListener(e -> {
+                                if (callback != null) callback.onFailure(e);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    if (callback != null) callback.onFailure(e);
                 });
     }
+
 
 
 
