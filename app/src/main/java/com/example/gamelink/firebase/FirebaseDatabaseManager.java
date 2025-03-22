@@ -501,17 +501,15 @@ public class FirebaseDatabaseManager {
     }
 
     public void getUserNotifications(String userId, DataCallback<List<AppNotification>> callback) {
-        FirebaseDatabase.getInstance().getReference("notifications")
-                .child(userId)
+        usersRef.child(userId).child("notifications")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         List<AppNotification> result = new ArrayList<>();
                         for (DataSnapshot ds : snapshot.getChildren()) {
-                            String id = ds.getKey();
-                            String msg = ds.child("message").getValue(String.class);
-                            if (id != null && msg != null) {
-                                result.add(new AppNotification(id, msg));
+                            AppNotification notification = ds.getValue(AppNotification.class);
+                            if (notification != null) {
+                                result.add(notification);
                             }
                         }
                         callback.onSuccess(result);
@@ -523,6 +521,7 @@ public class FirebaseDatabaseManager {
                     }
                 });
     }
+
 
 
 

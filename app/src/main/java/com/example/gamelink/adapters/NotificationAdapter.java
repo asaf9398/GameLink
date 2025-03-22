@@ -39,9 +39,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         AppNotification notification = notifications.get(position);
-        holder.message.setText(notification.getMessage());
+        holder.message.setText(notification.getMessage());  // 🟢 ודא שזה ה־message
     }
 
     @Override
