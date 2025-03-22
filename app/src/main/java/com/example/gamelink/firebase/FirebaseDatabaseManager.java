@@ -152,48 +152,80 @@ public class FirebaseDatabaseManager {
     }
 
     public void sendMessageNotificationToChatMembers(String chatId, Message message) {
-        chatsRef.child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+        getNicknameByUserId(message.getSenderId(), new DataCallback<String>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Chat chat = snapshot.getValue(Chat.class);
-                if (chat == null || chat.getParticipants() == null) return;
+            public void onSuccess(String senderNickname) {
+                chatsRef.child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Chat chat = snapshot.getValue(Chat.class);
+                        if (chat == null || chat.getParticipants() == null) return;
 
-                for (String userId : chat.getParticipants()) {
-                    // לא לשלוח למי ששלח את ההודעה
-                    if (!userId.equals(message.getSenderId())) {
-                        getNicknameByUserId(message.getSenderId(), new DataCallback<String>() {
-                            @Override
-                            public void onSuccess(String nickname) {
-                                String messageText = nickname + " sent a message in your chat";
-                                String notificationId = usersRef.child(userId).child("notifications").push().getKey();
+                        for (String nickname : chat.getParticipants()) {
+                            // לא לשלוח לשולח עצמו
+                            if (!nickname.equals(senderNickname)) {
+                                getUserIdByNickname(nickname, new DataCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String targetUid) {
+                                        String messageText = senderNickname + " sent a message in your chat";
+                                        String notificationId = usersRef.child(targetUid)
+                                                .child("notifications").push().getKey();
 
-                                if (notificationId != null) {
-                                    AppNotification notification = new AppNotification(
-                                            notificationId,
-                                            messageText,
-                                            message.getSenderId(),
-                                            System.currentTimeMillis(),
-                                            false
-                                    );
-                                    usersRef.child(userId).child("notifications").child(notificationId)
-                                            .setValue(notification);
-                                }
+                                        if (notificationId != null) {
+                                            AppNotification notification = new AppNotification(
+                                                    notificationId,
+                                                    messageText,
+                                                    message.getSenderId(),
+                                                    System.currentTimeMillis(),
+                                                    false
+                                            );
+                                            usersRef.child(targetUid).child("notifications")
+                                                    .child(notificationId)
+                                                    .setValue(notification);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        Log.e(TAG, "Failed to get UID from nickname", e);
+                                    }
+                                });
                             }
-
-                            @Override
-                            public void onFailure(Exception e) {
-                                Log.e(TAG, "Failed to fetch nickname for notification", e);
-                            }
-                        });
+                        }
                     }
-                }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Failed to load chat", error.toException());
+                    }
+                });
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Failed to load chat for message notification", error.toException());
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Failed to get sender nickname", e);
             }
         });
+    }
+
+    public void getUserIdByNickname(String nickname, DataCallback<String> callback) {
+        usersRef.orderByChild("nickname").equalTo(nickname)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot userSnap : snapshot.getChildren()) {
+                            String uid = userSnap.getKey();
+                            callback.onSuccess(uid);
+                            return;
+                        }
+                        callback.onFailure(new Exception("UID not found for nickname"));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callback.onFailure(error.toException());
+                    }
+                });
     }
 
 
