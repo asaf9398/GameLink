@@ -13,7 +13,7 @@
         android:id="@+id/search_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="חיפוש שחקנים"
+        android:text="Search For Players"
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_marginBottom="@dimen/margin_medium"/>
@@ -24,7 +24,7 @@
         style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="כינוי (Nickname)">
+        android:hint="Nickname">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_nickname_edit_text"
@@ -39,7 +39,7 @@
         style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="משחק"
+        android:hint="Game"
         android:layout_marginTop="@dimen/margin_small">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -56,7 +56,7 @@
         style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="מדינה"
+        android:hint="Country"
         android:layout_marginTop="@dimen/margin_small">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -81,14 +81,8 @@
             android:layout_weight="1"
             android:layout_marginEnd="@dimen/margin_small"
             android:layout_height="wrap_content"
-            android:text="חפש" />
+            android:text="Search" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/search_advanced_filter_button"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="פילטרים" />
     </LinearLayout>
 
     <!-- רשימה של תוצאות החיפוש -->

@@ -20,6 +20,7 @@ import com.example.gamelink.R;
 import com.example.gamelink.firebase.FirebaseDatabaseManager;
 import com.example.gamelink.models.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -53,7 +54,14 @@ public class EditProfileActivity extends AppCompatActivity {
         profileImageView = findViewById(R.id.edit_profile_image);
         saveButton = findViewById(R.id.save_button);
 
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "שגיאה בזיהוי המשתמש", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        userId = currentUser.getUid();
         databaseManager = new FirebaseDatabaseManager();
 
         loadUserInfo();
@@ -72,12 +80,11 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<User> users) {
                 for (User u : users) {
-                    if (u.getUserId().equals(userId)) {
+                    if (u.getUserId() != null && u.getUserId().equals(userId)) {
                         nicknameInput.setText(u.getNickname());
                         ageInput.setText(String.valueOf(u.getAge()));
                         countryInput.setText(u.getCountry());
 
-                        // טעינת תמונת פרופיל אם קיימת
                         if (u.getProfileImageUrl() != null && !u.getProfileImageUrl().isEmpty()) {
                             Glide.with(EditProfileActivity.this)
                                     .load(u.getProfileImageUrl())
@@ -92,6 +99,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(Exception e) {
                 Toast.makeText(EditProfileActivity.this, "שגיאה בטעינת הנתונים", Toast.LENGTH_SHORT).show();
+                Log.e("EditProfile", "Load user info failed", e);
             }
         });
     }
@@ -115,26 +123,21 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         if (selectedImageUri != null) {
-            // העלאת תמונה
             StorageReference imageRef = FirebaseStorage.getInstance().getReference("profile_images")
                     .child(userId + ".jpg");
 
             imageRef.putFile(selectedImageUri)
                     .continueWithTask(task -> {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
+                        if (!task.isSuccessful()) throw task.getException();
                         return imageRef.getDownloadUrl();
                     })
-                    .addOnSuccessListener(downloadUri -> {
-                        updateUserProfile(newName, newAge, newCountry, downloadUri.toString());
-                    })
+                    .addOnSuccessListener(downloadUri ->
+                            updateUserProfile(newName, newAge, newCountry, downloadUri.toString()))
                     .addOnFailureListener(e -> {
                         Toast.makeText(EditProfileActivity.this, "נכשל בהעלאת תמונה", Toast.LENGTH_SHORT).show();
                         Log.e("EditProfile", "Image upload failed", e);
                     });
         } else {
-            // בלי תמונה חדשה – לא נעדכן את שדה התמונה
             updateUserProfile(newName, newAge, newCountry, null);
         }
     }

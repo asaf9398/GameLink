@@ -18,7 +18,7 @@
             android:id="@+id/register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="הרשמה"
+            android:text="Regisration"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"
@@ -29,7 +29,7 @@
             style="@style/Widget.GameLink.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="כינוי (Nickname)"
+            android:hint="Nickname"
             android:layout_marginBottom="@dimen/margin_small">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -45,7 +45,7 @@
             style="@style/Widget.GameLink.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="אימייל">
+            android:hint="Email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -59,7 +59,7 @@
             style="@style/Widget.GameLink.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="סיסמה"
+            android:hint="Password"
             android:layout_marginTop="@dimen/margin_small">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -75,7 +75,7 @@
             style="@style/Widget.GameLink.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="הרשמה"
+            android:text="Register"
             android:layout_marginTop="@dimen/margin_medium"/>
 
         <!-- ProgressBar -->
@@ -92,7 +92,7 @@
             android:id="@+id/login_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="כבר יש לך חשבון? התחבר כאן"
+            android:text="Already have an account? Log In here!"
             android:textColor="@color/colorPrimary"
             android:layout_marginTop="@dimen/margin_small"
             android:gravity="center"/>

@@ -24,7 +24,7 @@
         style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="אימייל">
+        android:hint="Email">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
@@ -37,7 +37,7 @@
         style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="סיסמה"
+        android:hint="Password"
         android:layout_marginTop="@dimen/margin_small">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -51,7 +51,7 @@
     <Button
         android:id="@+id/login_button"
         style="@style/Widget.GameLink.Button"
-        android:text="התחבר"
+        android:text="Log In"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -60,7 +60,7 @@
         android:id="@+id/register_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="אין לך חשבון? הירשם כאן"
+        android:text="Do not have an account? Register here!"
         android:textColor="@color/colorPrimary"
         android:layout_marginTop="@dimen/margin_small"
         android:gravity="center"

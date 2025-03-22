@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="משחקים מועדפים"
+        android:text="Favorite Games"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -20,13 +20,13 @@
         android:id="@+id/game_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="הזן שם משחק"
+        android:hint="Enter Game's name"
         android:layout_marginBottom="@dimen/margin_small"/>
 
     <Button
         android:id="@+id/add_game_button"
         style="@style/Widget.GameLink.Button"
-        android:text="הוסף משחק"
+        android:text="Add Game"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -42,7 +42,7 @@
     <Button
         android:id="@+id/back_to_main_button"
         style="@style/Widget.GameLink.Button"
-        android:text="חזור למסך הראשי"
+        android:text="Back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"/>

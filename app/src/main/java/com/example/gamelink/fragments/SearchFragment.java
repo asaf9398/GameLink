@@ -54,7 +54,6 @@ public class SearchFragment extends Fragment {
         gameAutoCompleteTextView = view.findViewById(R.id.search_game_autocomplete);
         countryAutoCompleteTextView = view.findViewById(R.id.search_country_autocomplete);
         searchButton = view.findViewById(R.id.search_button);
-        advancedFilterButton = view.findViewById(R.id.search_advanced_filter_button);
         searchRecyclerView = view.findViewById(R.id.search_recycler_view);
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -125,8 +124,6 @@ public class SearchFragment extends Fragment {
             performSearch(nickname, game, country);
         });
 
-        advancedFilterButton.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Open advanced filters (not implemented)", Toast.LENGTH_SHORT).show());
 
         return view;
     }
