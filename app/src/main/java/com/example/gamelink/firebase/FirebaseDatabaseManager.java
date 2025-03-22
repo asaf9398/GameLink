@@ -141,15 +141,61 @@ public class FirebaseDatabaseManager {
     public void addMessageObject(String chatId, Message message) {
         String msgId = messagesRef.child(chatId).push().getKey();
         if (msgId != null) {
-            messagesRef.child(chatId)
-                    .child(msgId)
-                    .setValue(message)
-                    .addOnSuccessListener(aVoid ->
-                            Log.d(TAG, "Message added successfully as object"))
+            messagesRef.child(chatId).child(msgId).setValue(message)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Message added successfully");
+                        sendMessageNotificationToChatMembers(chatId, message);
+                    })
                     .addOnFailureListener(e ->
                             Log.e(TAG, "Failed to add message object", e));
         }
     }
+
+    public void sendMessageNotificationToChatMembers(String chatId, Message message) {
+        chatsRef.child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Chat chat = snapshot.getValue(Chat.class);
+                if (chat == null || chat.getParticipants() == null) return;
+
+                for (String userId : chat.getParticipants()) {
+                    // לא לשלוח למי ששלח את ההודעה
+                    if (!userId.equals(message.getSenderId())) {
+                        getNicknameByUserId(message.getSenderId(), new DataCallback<String>() {
+                            @Override
+                            public void onSuccess(String nickname) {
+                                String messageText = nickname + " sent a message in your chat";
+                                String notificationId = usersRef.child(userId).child("notifications").push().getKey();
+
+                                if (notificationId != null) {
+                                    AppNotification notification = new AppNotification(
+                                            notificationId,
+                                            messageText,
+                                            message.getSenderId(),
+                                            System.currentTimeMillis(),
+                                            false
+                                    );
+                                    usersRef.child(userId).child("notifications").child(notificationId)
+                                            .setValue(notification);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                Log.e(TAG, "Failed to fetch nickname for notification", e);
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Failed to load chat for message notification", error.toException());
+            }
+        });
+    }
+
 
     /**
      * Loads the list of Message objects from "messages/{chatId}" once.
