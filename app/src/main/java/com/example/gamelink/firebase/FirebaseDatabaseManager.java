@@ -410,17 +410,48 @@ public class FirebaseDatabaseManager {
 
     public void addFriend(String userId, String friendId, OperationCallback callback) {
         usersRef.child(userId).child("friends").child(friendId).setValue(true)
-                .addOnSuccessListener(aVoid -> usersRef.child(friendId).child("friends").child(userId).setValue(true)
-                        .addOnSuccessListener(aVoid2 -> {
-                            if (callback != null) callback.onSuccess();
-                        })
-                        .addOnFailureListener(e -> {
-                            if (callback != null) callback.onFailure(e);
-                        }))
+                .addOnSuccessListener(aVoid -> {
+                    usersRef.child(friendId).child("friends").child(userId).setValue(true)
+                            .addOnSuccessListener(aVoid2 -> {
+                                sendFriendRequestNotification(userId, friendId); // זו הקריאה החשובה
+                                if (callback != null) callback.onSuccess();
+                            })
+                            .addOnFailureListener(e -> {
+                                if (callback != null) callback.onFailure(e);
+                            });
+                })
                 .addOnFailureListener(e -> {
                     if (callback != null) callback.onFailure(e);
                 });
     }
+
+    public void sendFriendRequestNotification(String fromUserId, String toUserId) {
+        usersRef.child(fromUserId).child("nickname").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nickname = snapshot.getValue(String.class);
+                String message = nickname + " added you as a friend!";
+                String notificationId = usersRef.child(toUserId).child("notifications").push().getKey();
+
+                if (notificationId != null) {
+                    AppNotification notification = new AppNotification(
+                            notificationId,
+                            message,
+                            fromUserId,
+                            System.currentTimeMillis(),
+                            false
+                    );
+                    usersRef.child(toUserId).child("notifications").child(notificationId).setValue(notification);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FirebaseDatabaseManager", "Failed to send friend request notification", error.toException());
+            }
+        });
+    }
+
 
     public void addNotification(String userId, String message) {
         String notificationId = FirebaseDatabase.getInstance()
