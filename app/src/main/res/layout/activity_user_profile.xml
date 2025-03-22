@@ -8,6 +8,18 @@
     tools:context=".activities.UserProfileActivity"
     android:padding="16dp">
 
+
+	<ImageButton
+		android:id="@+id/back_button"
+		android:layout_width="32dp"
+		android:layout_height="32dp"
+		android:background="?attr/selectableItemBackgroundBorderless"
+		android:src="@android:drawable/ic_media_previous"
+		android:contentDescription="Back"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		android:layout_margin="8dp"/>
+		
     <!-- תמונת פרופיל -->
     <ImageView
         android:id="@+id/user_profile_image"
@@ -80,5 +92,9 @@
         app:layout_constraintTop_toBottomOf="@id/user_profile_fav_games_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+		
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,8 +21,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public interface OnUserActionListener {
         void onAddFriend(User user);
         void onRemoveFriend(User user);
-        void onViewProfile(User user);
-    }
+        void onUserClicked(User user);
+        }
 
     private final List<User> users;
     private final Set<String> currentFriendsIds;
@@ -65,7 +65,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             }
             notifyItemChanged(position);
         });
+
+        // ←←← זה מה שחסר לך
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onUserClicked(user);
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {

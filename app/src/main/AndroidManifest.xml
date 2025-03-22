@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
 		
+
+		
 		<activity android:name=".activities.LoginActivity"
 			android:exported="true"
 			android:theme="@style/Theme.GameLink">
@@ -32,7 +34,8 @@
 		</activity>
 		
 		<activity android:name=".activities.RegisterActivity" android:exported="true"/>
-
+		<activity android:name=".activities.EditProfileActivity" />
+		<activity android:name=".activities.UserProfileActivity" />
 		<activity android:name=".activities.FavoriteGamesActivity"/>
 		<activity android:name=".activities.CreateChatActivity"
 			android:exported="true" />

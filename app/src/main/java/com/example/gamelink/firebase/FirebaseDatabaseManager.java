@@ -1,9 +1,12 @@
 package com.example.gamelink.firebase;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.example.gamelink.models.AppNotification;
 import com.example.gamelink.models.Chat;
 import com.example.gamelink.models.Game;
 import com.example.gamelink.models.Message;
@@ -13,6 +16,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -416,6 +421,113 @@ public class FirebaseDatabaseManager {
                     if (callback != null) callback.onFailure(e);
                 });
     }
+
+    public void addNotification(String userId, String message) {
+        String notificationId = FirebaseDatabase.getInstance()
+                .getReference("notifications")
+                .child(userId)
+                .push()
+                .getKey();
+
+        if (notificationId == null) return;
+
+        AppNotification notification = new AppNotification(
+                notificationId, userId, message, System.currentTimeMillis(), false
+        );
+
+        FirebaseDatabase.getInstance()
+                .getReference("notifications")
+                .child(userId)
+                .child(notificationId)
+                .setValue(notification);
+    }
+
+
+    public void removeNotification(String userId, String text, OperationCallback callback) {
+        usersRef.child(userId).child("notifications")
+                .orderByValue().equalTo(text)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ds.getRef().removeValue();
+                        }
+                        callback.onSuccess();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callback.onFailure(error.toException());
+                    }
+                });
+    }
+
+    public void clearNotifications(String userId, OperationCallback callback) {
+        usersRef.child(userId).child("notifications")
+                .removeValue()
+                .addOnSuccessListener(unused -> callback.onSuccess())
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getUserNotifications(String userId, DataCallback<List<AppNotification>> callback) {
+        FirebaseDatabase.getInstance().getReference("notifications")
+                .child(userId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<AppNotification> result = new ArrayList<>();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String id = ds.getKey();
+                            String msg = ds.child("message").getValue(String.class);
+                            if (id != null && msg != null) {
+                                result.add(new AppNotification(id, msg));
+                            }
+                        }
+                        callback.onSuccess(result);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callback.onFailure(error.toException());
+                    }
+                });
+    }
+
+
+
+    public void deleteAllNotifications(String userId, OperationCallback callback) {
+        FirebaseDatabase.getInstance().getReference("notifications")
+                .child(userId)
+                .removeValue()
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(callback::onFailure);
+    }
+
+
+
+    public void updateUserProfile(String userId, String nickname, int age, String country, @Nullable String imageUrl, OperationCallback callback) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("nickname", nickname);
+        updates.put("age", age);
+        updates.put("country", country);
+
+        if (imageUrl != null) {
+            updates.put("profileImageUrl", imageUrl);
+        }
+
+        userRef.updateChildren(updates)
+                .addOnSuccessListener(aVoid -> {
+                    if (callback != null) callback.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    if (callback != null) callback.onFailure(e);
+                });
+    }
+
+
+
 
 
     public void getUserFriends(String userId, DataCallback<List<User>> callback) {

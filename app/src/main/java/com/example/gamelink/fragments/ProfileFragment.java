@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.gamelink.R;
+import com.example.gamelink.activities.EditProfileActivity;
 import com.example.gamelink.activities.FavoriteGamesActivity;
 import com.example.gamelink.activities.LoginActivity;
 import com.example.gamelink.activities.UserProfileActivity;
@@ -98,10 +100,8 @@ public class ProfileFragment extends Fragment {
                 databaseManager.removeFriend(friendId, currentUserId, null);
             }
 
-
             @Override
             public void onUserClicked(User user) {
-                // צפייה בפרופיל מתוך רשימת חברים בפרופיל
                 Intent intent = new Intent(getContext(), UserProfileActivity.class);
                 intent.putExtra("userId", user.getUserId());
                 startActivity(intent);
@@ -113,12 +113,23 @@ public class ProfileFragment extends Fragment {
 
         emailTextView.setText(user.getEmail());
 
+        // בחלק של onCreateView, איפה שנטענים פרטי המשתמש:
+
         databaseManager.getAllUsers(new FirebaseDatabaseManager.DataCallback<List<User>>() {
             @Override
             public void onSuccess(List<User> users) {
                 for (User u : users) {
                     if (u.getUserId() != null && u.getUserId().equals(currentUserId)) {
                         nameTextView.setText(u.getNickname() != null ? u.getNickname() : "No Name");
+
+                        // טעינת תמונת פרופיל
+                        if (u.getProfileImageUrl() != null && !u.getProfileImageUrl().isEmpty()) {
+                            Glide.with(requireContext())
+                                    .load(u.getProfileImageUrl())
+                                    .placeholder(R.drawable.ic_launcher_foreground)
+                                    .into(profileImageView);
+                        }
+
                         break;
                     }
                 }
@@ -129,6 +140,7 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "שגיאה בטעינת הנתונים", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         databaseManager.getUserFriends(currentUserId, new FirebaseDatabaseManager.DataCallback<List<User>>() {
             @Override
@@ -150,8 +162,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        editProfileButton.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Edit Profile (not implemented)", Toast.LENGTH_SHORT).show());
+        editProfileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            startActivity(intent);
+        });
 
         logoutButton.setOnClickListener(v -> {
             mAuth.signOut();

@@ -9,41 +9,43 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamelink.R;
+import com.example.gamelink.models.AppNotification;
 
 import java.util.List;
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
-    private final List<String> notifications;
+    private List<AppNotification> notifications;
 
-    public NotificationAdapter(List<String> notifications) {
+    public NotificationAdapter(List<AppNotification> notifications) {
         this.notifications = notifications;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView message;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            message = itemView.findViewById(R.id.notification_text); // חייב לוודא שזה קיים ב־item_notification.xml
+        }
     }
 
     @NonNull
     @Override
-    public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification, parent, false);
-        return new NotificationViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_notification, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        String notification = notifications.get(position);
-        holder.notificationTextView.setText(notification);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        AppNotification notification = notifications.get(position);
+        holder.message.setText(notification.getMessage());
     }
 
     @Override
     public int getItemCount() {
         return notifications.size();
-    }
-
-    public static class NotificationViewHolder extends RecyclerView.ViewHolder {
-        TextView notificationTextView;
-
-        public NotificationViewHolder(@NonNull View itemView) {
-            super(itemView);
-            notificationTextView = itemView.findViewById(R.id.notification_text_view);
-        }
     }
 }

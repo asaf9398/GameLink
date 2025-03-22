@@ -4,11 +4,12 @@ import java.util.List;
 
 public class User {
     private String userId;
-    private String name; // משמש ל־nickname
+    private String name; // משמש כ־nickname
     private int age;
     private String country;
     private List<String> favoriteGames;
     private List<String> friends;
+    private String profileImageUrl;
 
     public User() {} // דרוש לפיירבייס
 
@@ -20,17 +21,12 @@ public class User {
         this.favoriteGames = favoriteGames;
     }
 
-    // אפשר להשאיר גם בנאי "ישן" אם אתם רוצים, אבל מומלץ לאחד ולוודא שקוד יצירת user משתמש בבנאי החדש.
-    public List<String> getFriends() {
-        return friends;
-    }
+    // ========== GETTERS & SETTERS ==========
 
-    public void setFriends(List<String> friends) {
-        this.friends = friends;
-    }
     public String getUserId() {
         return userId;
     }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -38,14 +34,16 @@ public class User {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    // *** GET/SET nickname
+    // כינוי
     public String getNickname() {
         return name;
     }
+
     public void setNickname(String nickname) {
         this.name = nickname;
     }
@@ -53,6 +51,7 @@ public class User {
     public int getAge() {
         return age;
     }
+
     public void setAge(int age) {
         this.age = age;
     }
@@ -60,6 +59,7 @@ public class User {
     public String getCountry() {
         return country;
     }
+
     public void setCountry(String country) {
         this.country = country;
     }
@@ -67,7 +67,24 @@ public class User {
     public List<String> getFavoriteGames() {
         return favoriteGames;
     }
+
     public void setFavoriteGames(List<String> favoriteGames) {
         this.favoriteGames = favoriteGames;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

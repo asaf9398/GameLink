@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamelink.R;
 import com.example.gamelink.adapters.NotificationAdapter;
+import com.example.gamelink.firebase.FirebaseDatabaseManager;
+import com.example.gamelink.models.AppNotification;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +28,11 @@ public class NotificationsFragment extends Fragment {
 
     private RecyclerView notificationsRecyclerView;
     private NotificationAdapter notificationAdapter;
-    private List<String> notifications;
+    private List<AppNotification> notifications;
     private ImageButton markAllReadButton;
+
+    private FirebaseDatabaseManager databaseManager;
+    private String userId;
 
     @Nullable
     @Override
@@ -44,25 +51,45 @@ public class NotificationsFragment extends Fragment {
         notificationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         notificationsRecyclerView.setAdapter(notificationAdapter);
 
-        // לדוגמה: הוספת התראות
-        notifications.add("New message from John");
-        notifications.add("Reminder: Play session at 6 PM");
-        notifications.add("Update: New version of GameLink is available");
-        notificationAdapter.notifyDataSetChanged();
+        databaseManager = new FirebaseDatabaseManager();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // מאפשר מחיקת התראה בהחלקה (Swipe)
+        loadNotificationsFromFirebase();
         enableSwipeToDelete();
 
-        // כפתור "סמן הכל כנקרא"
         markAllReadButton.setOnClickListener(v -> {
-            // כאן אפשר לממש לוגיקה של "לסמן כל ההתראות כנקראו"
-            // לדוגמה ננקה רשימה
-            notifications.clear();
-            notificationAdapter.notifyDataSetChanged();
-            Snackbar.make(v, "All notifications marked as read!", Snackbar.LENGTH_SHORT).show();
+            databaseManager.deleteAllNotifications(userId, new FirebaseDatabaseManager.OperationCallback() {
+                @Override
+                public void onSuccess() {
+                    notifications.clear();
+                    notificationAdapter.notifyDataSetChanged();
+                    Snackbar.make(v, "All notifications marked as read!", Snackbar.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(getContext(), "Failed to clear notifications", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         return view;
+    }
+
+    private void loadNotificationsFromFirebase() {
+        databaseManager.getUserNotifications(userId, new FirebaseDatabaseManager.DataCallback<List<AppNotification>>() {
+            @Override
+            public void onSuccess(List<AppNotification> data) {
+                notifications.clear();
+                notifications.addAll(data);
+                notificationAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(getContext(), "Failed to load notifications", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void enableSwipeToDelete() {
@@ -73,20 +100,31 @@ public class NotificationsFragment extends Fragment {
                     public boolean onMove(@NonNull RecyclerView recyclerView,
                                           @NonNull RecyclerView.ViewHolder viewHolder,
                                           @NonNull RecyclerView.ViewHolder target) {
-                        // לא דורש גרירה להחלפת מיקומים
                         return false;
                     }
 
                     @Override
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                        // מחיקת התראה מהרשימה
                         int position = viewHolder.getAdapterPosition();
-                        notifications.remove(position);
-                        notificationAdapter.notifyItemRemoved(position);
+                        AppNotification notif = notifications.get(position);
+
+                        // מחיקה מה- Firebase
+                        databaseManager.removeNotification(userId, notif.getId(), new FirebaseDatabaseManager.OperationCallback() {
+                            @Override
+                            public void onSuccess() {
+                                notifications.remove(position);
+                                notificationAdapter.notifyItemRemoved(position);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                Toast.makeText(getContext(), "Failed to delete notification", Toast.LENGTH_SHORT).show();
+                                notificationAdapter.notifyItemChanged(position);
+                            }
+                        });
                     }
                 };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(notificationsRecyclerView);
+        new ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(notificationsRecyclerView);
     }
 }
