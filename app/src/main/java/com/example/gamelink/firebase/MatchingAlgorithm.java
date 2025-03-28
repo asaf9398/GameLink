@@ -1,5 +1,6 @@
 package com.example.gamelink.firebase;
 
+import com.example.gamelink.models.Game;
 import com.example.gamelink.models.User;
 
 import java.util.ArrayList;

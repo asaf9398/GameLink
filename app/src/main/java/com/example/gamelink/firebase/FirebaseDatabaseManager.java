@@ -96,19 +96,17 @@ public class FirebaseDatabaseManager {
 
                             String country  = userSnapshot.child("country").getValue(String.class);
 
-                            // Favorite games
+                            // Favorite games (extracting only game names)
                             List<String> favoriteGames = new ArrayList<>();
                             if (userSnapshot.child("favoriteGames").exists()) {
-                                Object gamesObject = userSnapshot.child("favoriteGames").getValue();
-                                if (gamesObject instanceof List) {
-                                    // If stored as a raw list
-                                    favoriteGames = (List<String>) gamesObject;
-                                } else if (gamesObject instanceof Map) {
-                                    // If stored as a map of {gameId: gameName} or similar
-                                    Map<String, Object> gamesMap = (Map<String, Object>) gamesObject;
-                                    favoriteGames.addAll(gamesMap.keySet());
+                                for (DataSnapshot gameSnap : userSnapshot.child("favoriteGames").getChildren()) {
+                                    String gameName = gameSnap.child("gameName").getValue(String.class);
+                                    if (gameName != null) {
+                                        favoriteGames.add(gameName);
+                                    }
                                 }
                             }
+
 
                             // Create the user object
                             User user = new User(userId, nickname, age, country, favoriteGames);
