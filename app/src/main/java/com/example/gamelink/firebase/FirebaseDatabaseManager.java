@@ -96,6 +96,9 @@ public class FirebaseDatabaseManager {
 
                             String country  = userSnapshot.child("country").getValue(String.class);
 
+                            String profileImageUrl = userSnapshot.child("profileImageUrl").getValue(String.class);
+
+
                             // Favorite games (extracting only game names)
                             List<String> favoriteGames = new ArrayList<>();
                             if (userSnapshot.child("favoriteGames").exists()) {
@@ -109,7 +112,7 @@ public class FirebaseDatabaseManager {
 
 
                             // Create the user object
-                            User user = new User(userId, nickname, age, country, favoriteGames);
+                            User user = new User(userId, nickname, age, country, favoriteGames,profileImageUrl);
                             users.add(user);
 
                         } catch (Exception e) {

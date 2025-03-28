@@ -21,6 +21,15 @@ public class User {
         this.favoriteGames = favoriteGames;
     }
 
+    public User(String userId, String name, int age, String country, List<String> favoriteGames, String profileImageUrl) {
+        this.userId = userId;
+        this.name = name;
+        this.age = age;
+        this.country = country;
+        this.favoriteGames = favoriteGames;
+        this.profileImageUrl=profileImageUrl;
+    }
+
     // ========== GETTERS & SETTERS ==========
 
     public String getUserId() {

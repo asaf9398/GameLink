@@ -2,10 +2,12 @@ package com.example.gamelink.activities;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.gamelink.R;
 import com.example.gamelink.firebase.FirebaseDatabaseManager;
 import com.example.gamelink.models.Game;
@@ -17,6 +19,7 @@ import java.util.List;
 public class UserProfileActivity extends AppCompatActivity {
 
     private MaterialTextView nicknameText, ageText, countryText, favGamesText;
+    private ImageView profileImageView;
     private String userId;
     private FirebaseDatabaseManager db;
 
@@ -29,6 +32,7 @@ public class UserProfileActivity extends AppCompatActivity {
         ageText = findViewById(R.id.user_profile_age);
         countryText = findViewById(R.id.user_profile_country);
         favGamesText = findViewById(R.id.user_profile_fav_games);
+        profileImageView = findViewById(R.id.user_profile_image);  // 👈 טעינת תמונה
 
         db = new FirebaseDatabaseManager();
         userId = getIntent().getStringExtra("userId");
@@ -43,6 +47,14 @@ public class UserProfileActivity extends AppCompatActivity {
                             nicknameText.setText(u.getNickname());
                             ageText.setText("Age: " + u.getAge());
                             countryText.setText("Country: " + u.getCountry());
+
+                            if (u.getProfileImageUrl() != null && !u.getProfileImageUrl().isEmpty()) {
+                                Glide.with(UserProfileActivity.this)
+                                        .load(u.getProfileImageUrl())
+                                        .placeholder(R.drawable.ic_launcher_foreground)
+                                        .into(profileImageView);
+                            }
+
                             break;
                         }
                     }
