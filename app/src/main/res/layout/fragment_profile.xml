@@ -61,6 +61,9 @@
             android:layout_height="wrap_content"
             android:text="Edit Profile"
             android:layout_marginTop="8dp"
+            app:backgroundTint="@color/search_player_button"
+			android:textColor="@color/white"
+			app:cornerRadius="16dp"
             android:layout_marginBottom="8dp" />
 
         <!-- כפתור משחקים מועדפים -->
@@ -71,6 +74,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Favorite Games"
+			app:backgroundTint="@color/search_player_button"
+			app:cornerRadius="16dp"
+			android:textColor="@color/white"
             android:layout_marginBottom="16dp" />
 
         <!-- כפתור התנתקות -->

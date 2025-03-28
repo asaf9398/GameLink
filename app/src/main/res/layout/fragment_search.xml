@@ -81,6 +81,8 @@
             android:layout_weight="1"
             android:layout_marginEnd="@dimen/margin_small"
             android:layout_height="wrap_content"
+			app:backgroundTint="@color/search_player_button"
+			app:cornerRadius="16dp"
             android:text="Search" />
 
     </LinearLayout>

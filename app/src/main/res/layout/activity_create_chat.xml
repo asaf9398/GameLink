@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Create Chat"
+			android:backgroundTint="@color/new_chat_button"
             android:layout_marginTop="16dp" />
     </LinearLayout>
 
@@ -48,6 +49,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu"
+		app:itemIconTint="@color/bottom_nav_color_state"
+        app:itemTextColor="@color/bottom_nav_color_state"
+        android:background="@color/colorSurface"/>
+		/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
