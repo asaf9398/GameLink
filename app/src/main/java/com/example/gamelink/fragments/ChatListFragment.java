@@ -51,18 +51,17 @@ public class ChatListFragment extends Fragment {
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsRecyclerView.setAdapter(adapter);
 
-        // טען את הכינוי לפני טעינת הצ'אטים
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseManager.getNicknameByUserId(uid, new FirebaseDatabaseManager.DataCallback<String>() {
             @Override
             public void onSuccess(String nickname) {
                 currentUserNickname = nickname;
-                loadUserChats(); // נטען את הצ'אטים רק אחרי שיש כינוי
+                loadUserChats();
             }
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getContext(), "שגיאה בטעינת הכינוי", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading the nickname", Toast.LENGTH_SHORT).show();
             }
         });
 

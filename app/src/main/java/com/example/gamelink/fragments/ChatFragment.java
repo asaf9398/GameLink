@@ -93,7 +93,7 @@ public class ChatFragment extends Fragment {
         chatRecyclerView.setLayoutManager(layoutManager);
         chatRecyclerView.setAdapter(chatAdapter);
 
-        loadChatTitleWithParticipants(); // <<--- כאן קוראים לפונקציה החדשה
+        loadChatTitleWithParticipants();
         loadMessages();
 
         sendButton.setOnClickListener(v -> sendMessage());

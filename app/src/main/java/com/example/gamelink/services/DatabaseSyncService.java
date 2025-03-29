@@ -31,7 +31,6 @@ public class DatabaseSyncService extends Service {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d(TAG, "Data synced: " + snapshot.getValue());
-                // כאן אפשר לעדכן נתונים באפליקציה
             }
 
             @Override
@@ -55,6 +54,6 @@ public class DatabaseSyncService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null; // לא נדרש
+        return null;
     }
 }

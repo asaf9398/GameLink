@@ -4,14 +4,14 @@ import java.util.List;
 
 public class User {
     private String userId;
-    private String name; // משמש כ־nickname
+    private String name;
     private int age;
     private String country;
     private List<String> favoriteGames;
     private List<String> friends;
     private String profileImageUrl;
 
-    public User() {} // דרוש לפיירבייס
+    public User() {}
 
     public User(String userId, String name, int age, String country, List<String> favoriteGames) {
         this.userId = userId;
@@ -30,7 +30,6 @@ public class User {
         this.profileImageUrl=profileImageUrl;
     }
 
-    // ========== GETTERS & SETTERS ==========
 
     public String getUserId() {
         return userId;
@@ -48,7 +47,6 @@ public class User {
         this.name = name;
     }
 
-    // כינוי
     public String getNickname() {
         return name;
     }

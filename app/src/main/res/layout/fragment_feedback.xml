@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- כותרת ראשית למסך המשוב -->
         <TextView
             android:id="@+id/feedback_title"
             android:layout_width="wrap_content"
@@ -21,7 +20,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <!-- דירוג כוכבים (RatingBar סטנדרטי) -->
         <RatingBar
             android:id="@+id/feedback_rating_bar"
             android:layout_width="wrap_content"
@@ -30,7 +28,6 @@
             android:numStars="5"
             android:layout_marginBottom="16dp" />
 
-        <!-- קבוצת RadioGroup רגילה (קטגוריית פידבק) -->
         <RadioGroup
             android:id="@+id/feedback_category_radio_group"
             android:layout_width="wrap_content"
@@ -57,7 +54,6 @@
                 android:text="Report a Bug" />
         </RadioGroup>
 
-        <!-- טקסט מרובה שורות -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/feedback_text_layout"
             android:layout_width="match_parent"
@@ -73,7 +69,6 @@
                 android:gravity="top|start" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- אפשרות הגשת פידבק אנונימי -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/feedback_anon_checkbox"
             android:layout_width="wrap_content"
@@ -82,7 +77,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp" />
 
-        <!-- כפתור שליחה -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/feedback_submit_button"
             android:layout_width="wrap_content"

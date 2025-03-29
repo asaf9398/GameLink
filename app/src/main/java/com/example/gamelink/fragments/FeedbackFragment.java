@@ -20,11 +20,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-/**
- * מסך פידבק, המאפשר למשתמש לתת דירוג + משוב + קטגוריה ועוד.
- * החלפנו את MaterialRatingBar ב-RatingBar הרגיל,
- * ואת MaterialRadioGroup ב-RadioGroup הסטנדרטי.
- */
+
 public class FeedbackFragment extends Fragment {
 
     private RatingBar ratingBar;
@@ -36,7 +32,6 @@ public class FeedbackFragment extends Fragment {
 
     private FirebaseDatabaseManager databaseManager;
 
-    // לדוגמה, על איזה משתמש נותנים פידבק
     private String targetUserId = "example_user_id";
 
     @Nullable
@@ -45,10 +40,8 @@ public class FeedbackFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        // טוענים את ה-XML המתוקן, שבו מוגדרים RatingBar + RadioGroup רגילים
         View view = inflater.inflate(R.layout.fragment_feedback, container, false);
 
-        // איתור רכיבי ה-UI
         ratingBar         = view.findViewById(R.id.feedback_rating_bar);
         feedbackTextLayout = view.findViewById(R.id.feedback_text_layout);
         feedbackEditText  = view.findViewById(R.id.feedback_edit_text);
@@ -58,13 +51,11 @@ public class FeedbackFragment extends Fragment {
 
         databaseManager = new FirebaseDatabaseManager();
 
-        // מאזין לכפתור "שלח"
         submitButton.setOnClickListener(v -> {
             float rating = ratingBar.getRating();
             String feedback = feedbackEditText.getText().toString().trim();
             int selectedCategoryId = categoryRadioGroup.getCheckedRadioButtonId();
 
-            // בדיקה שהמשתמש מילא את כל השדות
             if (rating <= 0 || feedback.isEmpty() || selectedCategoryId == -1) {
                 Toast.makeText(getContext(), "Please fill all fields & rating", Toast.LENGTH_SHORT).show();
                 return;
@@ -72,21 +63,17 @@ public class FeedbackFragment extends Fragment {
 
             boolean isAnonymous = anonCheckBox.isChecked();
 
-            // שליפת הקטגוריה מתוך RadioButton שנבחר
             String category = "";
             RadioButton selectedRb = view.findViewById(selectedCategoryId);
             if (selectedRb != null) {
                 category = selectedRb.getText().toString();
             }
 
-            // הוספת הדירוג והמשוב ל-Firebase
-            // ניתן לשנות את addRating אם רוצים לשמור גם את הקטגוריה והשדות הנוספים בנפרד
             databaseManager.addRating(targetUserId, (int) rating,
                     category + ": " + feedback + (isAnonymous ? " (Anonymous)" : ""));
 
             Toast.makeText(getContext(), "Feedback submitted successfully", Toast.LENGTH_SHORT).show();
 
-            // ניקוי השדות לאחר שליחה
             ratingBar.setRating(0f);
             feedbackEditText.setText("");
             categoryRadioGroup.clearCheck();

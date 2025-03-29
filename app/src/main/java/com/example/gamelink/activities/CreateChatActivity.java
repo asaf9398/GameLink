@@ -24,7 +24,7 @@ public class CreateChatActivity extends AppCompatActivity {
     private Button createChatButton;
     private FirebaseDatabaseManager databaseManager;
 
-    private String currentUserNickname = null; // במקום currentUserId
+    private String currentUserNickname = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,6 @@ public class CreateChatActivity extends AppCompatActivity {
 
         databaseManager = new FirebaseDatabaseManager();
 
-        // 1) נטען את ה־nickname של המשתמש הנוכחי
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseManager.getNicknameByUserId(uid, new FirebaseDatabaseManager.DataCallback<String>() {
             @Override
@@ -47,26 +46,26 @@ public class CreateChatActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(CreateChatActivity.this, "שגיאה בטעינת הכינוי", Toast.LENGTH_SHORT).show();
-                finish(); // אפשרות: לא מאפשר יצירת צ'אט אם אין כינוי
+                Toast.makeText(CreateChatActivity.this, "Error loading nickname ", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
         createChatButton.setOnClickListener(v -> {
             String chatName = chatNameEditText.getText().toString().trim();
             if (TextUtils.isEmpty(chatName)) {
-                Toast.makeText(this, "נא להזין שם לצ'אט.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter a name for the chat", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (currentUserNickname == null) {
-                Toast.makeText(this, "טעינת הכינוי עדיין נמשכת...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The nickname is still loading...", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             String chatId = UUID.randomUUID().toString();
             List<String> participants = new ArrayList<>();
-            participants.add(currentUserNickname); // הכינוי של המשתמש הנוכחי
+            participants.add(currentUserNickname);
 
             String extraParticipantsText = participantsEditText.getText().toString().trim();
             if (!TextUtils.isEmpty(extraParticipantsText)) {
@@ -85,13 +84,13 @@ public class CreateChatActivity extends AppCompatActivity {
             databaseManager.addChatObject(chat, new FirebaseDatabaseManager.OperationCallback() {
                 @Override
                 public void onSuccess() {
-                    Toast.makeText(CreateChatActivity.this, "צ'אט נוצר בהצלחה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateChatActivity.this, "Chat created successfully", Toast.LENGTH_SHORT).show();
                     finish();
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-                    Toast.makeText(CreateChatActivity.this, "נכשל ביצירת הצ'אט: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateChatActivity.this, "Failed to create the chat: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         });

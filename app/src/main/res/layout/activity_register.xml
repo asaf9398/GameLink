@@ -13,7 +13,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- כותרת ראשית למסך -->
         <TextView
             android:id="@+id/register_title"
             android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
             android:textColor="@color/colorPrimary"
             android:layout_marginBottom="@dimen/margin_medium"/>
 
-        <!-- שדה הזנת כינוי (Nickname) -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.GameLink.TextInputLayout"
             android:layout_width="match_parent"
@@ -40,7 +38,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <!-- שדה הזנת אימייל -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.GameLink.TextInputLayout"
             android:layout_width="match_parent"
@@ -54,7 +51,6 @@
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- שדה הזנת סיסמה -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.GameLink.TextInputLayout"
             android:layout_width="match_parent"
@@ -69,7 +65,6 @@
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- כפתור הרשמה -->
         <Button
             android:id="@+id/register_button"
             style="@style/Widget.GameLink.Button"
@@ -78,7 +73,6 @@
             android:text="Register"
             android:layout_marginTop="@dimen/margin_medium"/>
 
-        <!-- ProgressBar -->
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
@@ -87,7 +81,6 @@
             android:layout_marginTop="@dimen/margin_small"
             android:layout_gravity="center"/>
 
-        <!-- טקסט/כפתור מעבר להתחברות -->
         <TextView
             android:id="@+id/login_text"
             android:layout_width="wrap_content"

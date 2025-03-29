@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App Name -->
     <string name="app_name">GameLink</string>
 
-    <!-- Feedback -->
     <string name="feedback_title">Rate Your Experience</string>
     <string name="feedback_hint">Write your feedback here</string>
     <string name="feedback_button_submit">Submit Feedback</string>
 
-    <!-- Profile -->
     <string name="profile_name">Username</string>
     <string name="profile_email">Email</string>
     <string name="profile_button_logout">Logout</string>
     <string name="profile_button_favorites">Favorite Games</string>
 	<string name="profile_image">Profile Image</string>
 
-    <!-- Search -->
     <string name="search_title">Search Players</string>
     <string name="search_nickname_hint">Nickname</string>
     <string name="search_game_hint">Game</string>
@@ -23,15 +19,12 @@
     <string name="search_button">Search</string>
     <string name="search_advanced_filter_button">Filters</string>
 
-    <!-- Google Sign-In -->
     <string name="google_sign_in">Sign in with Google</string>
     <string name="sign_in_prompt">Or use your email to sign in</string>
     <string name="default_web_client_id">your-client-id</string>
 
-    <!-- Chat / FAB -->
     <string name="new_chat">New Chat</string>
 
-    <!-- Additional strings -->
     <string name="recommendations_title">Recommendations</string>
     <string name="notifications_title">Notifications</string>
     <string name="manage_games_title">Manage Global Games</string>

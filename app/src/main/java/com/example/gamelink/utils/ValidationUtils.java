@@ -7,7 +7,7 @@ public class ValidationUtils {
     }
 
     public static boolean isValidPassword(String password) {
-        return password != null && password.length() >= 6; // לדוגמה: מינימום 6 תווים
+        return password != null && password.length() >= 6;
     }
 
     public static boolean isValidName(String name) {
@@ -15,6 +15,6 @@ public class ValidationUtils {
     }
 
     public static boolean isValidAge(int age) {
-        return age >= 13 && age <= 100; // לדוגמה: מגבלת גיל
+        return age >= 13 && age <= 100;
     }
 }

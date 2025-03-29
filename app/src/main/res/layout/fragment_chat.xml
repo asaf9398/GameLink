@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <!-- אזור עליון (Top Bar) -->
     <LinearLayout
         android:id="@+id/chat_top_bar"
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         android:padding="8dp"
         android:background="@color/purple_700">
 
-        <!-- כותרת צ'אט או שם משתמש -->
         <TextView
 		    android:id="@+id/chat_title"
             android:layout_width="0dp"
@@ -39,7 +37,6 @@
             android:tint="@android:color/white" />
     </LinearLayout>
 
-    <!-- רשימת הודעות -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
@@ -47,7 +44,6 @@
         android:layout_weight="1"
         android:padding="8dp" />
 
-    <!-- אזור השליחה (Compose bar) -->
     <LinearLayout
         android:id="@+id/chat_bottom_bar"
         android:layout_width="match_parent"
@@ -57,7 +53,6 @@
         android:background="@color/colorBackground"
         android:elevation="4dp">
 
-        <!-- כפתור צרוף קובץ -->
         <ImageButton
             android:id="@+id/chat_attach_button"
             android:layout_width="48dp"
@@ -67,7 +62,6 @@
             android:tint="@color/purple_700"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
-        <!-- שדה טקסט להודעה -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -86,7 +80,6 @@
                 android:hint="Type a message..." />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- כפתור שליחה -->
         <ImageButton
             android:id="@+id/chat_send_button"
             android:layout_width="48dp"

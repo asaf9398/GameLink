@@ -58,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
 
         if (nickname.isEmpty() || email.isEmpty() || password.isEmpty() || password.length() < 6) {
-            Toast.makeText(this, "נא למלא את כל השדות. סיסמה חייבת להיות לפחות 6 תווים!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please fill in all the fields. The password must be at least 6 characters long!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -70,24 +70,22 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser fUser = mAuth.getCurrentUser();
                         if (fUser != null) {
-                            // עדכון displayName ל־nickname
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(nickname)
                                     .build();
                             fUser.updateProfile(profileUpdates).addOnCompleteListener(profileTask -> {
                                 if (profileTask.isSuccessful()) {
-                                    // שמירת אובייקט User למסד הנתונים
                                     String uid = fUser.getUid();
                                     User newUser = new User(
                                             uid,
-                                            nickname, // נשמר כ-name
+                                            nickname,
                                             0,
                                             "",
                                             new ArrayList<>()
                                     );
 
                                     new FirebaseDatabaseManager().addUser(newUser);
-                                    Toast.makeText(this, "נרשמת בהצלחה!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "You have successfully registered!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
@@ -95,8 +93,8 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                         }
                     } else {
-                        Log.e("RegisterError", "הרשמה נכשלה", task.getException());
-                        Toast.makeText(this, "הרשמה נכשלה! נסה שוב.", Toast.LENGTH_SHORT).show();
+                        Log.e("RegisterError", "Registration failed.", task.getException());
+                        Toast.makeText(this, "Registration failed! Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

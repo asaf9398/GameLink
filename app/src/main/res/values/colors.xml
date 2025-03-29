@@ -9,13 +9,10 @@
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnSecondary">#000000</color>
 
-    <!-- בסיסיים -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <!-- אם colors.xml כבר קיים, פשוט הוסף שורה כזו: -->
     <color name="purple_700">#FFA725</color>
 
-    <!-- דוגמה לצבעים אחרים שייתכן ותרצה -->
     <color name="purple_200">#FFA725</color>
     <color name="purple_500">#FFA725</color>
     <color name="teal_200">#FF03DAC5</color>
@@ -23,7 +20,6 @@
     <color name="send_feedback_button">#735557</color>
     <color name="search_player_button">#735557</color>
     <color name="new_chat_button">#735557</color>
-	<color name="my_custom_purple">#E8DFFB</color> <!-- או כל צבע שאתה רוצה -->
+	<color name="my_custom_purple">#E8DFFB</color>
 
-    <!-- ... -->
 </resources>

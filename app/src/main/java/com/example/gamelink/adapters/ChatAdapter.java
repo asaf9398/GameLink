@@ -19,9 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * ChatAdapter עם 2 סוגי בועות: INCOMING/OUTGOING
- */
+
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
     private static final int VIEW_TYPE_INCOMING = 0;
     private static final int VIEW_TYPE_OUTGOING = 1;
@@ -74,15 +72,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
 
         public void bind(Message message) {
-            // תאריך
             String dateTimeString = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                     .format(new Date(message.getTimestamp()));
             timestampTextView.setText(dateTimeString);
 
-            // אם זה הודעת קובץ (תמונה)
             if (message.getContent().startsWith("[File] ")) {
 
-                //Log.d("ChatAdapter", "Message content: " + message.getContent());
 
                 messageTextView.setVisibility(View.GONE);
                 messageImageView.setVisibility(View.VISIBLE);

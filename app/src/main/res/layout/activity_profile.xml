@@ -11,7 +11,7 @@
         android:id="@+id/name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="שם משתמש"
+        android:text="Username"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"

@@ -26,7 +26,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            message = itemView.findViewById(R.id.notification_text); // חייב לוודא שזה קיים ב־item_notification.xml
+            message = itemView.findViewById(R.id.notification_text);
         }
     }
 
@@ -41,7 +41,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         AppNotification notification = notifications.get(position);
-        holder.message.setText(notification.getMessage());  // 🟢 ודא שזה ה־message
+        holder.message.setText(notification.getMessage());
     }
 
     @Override

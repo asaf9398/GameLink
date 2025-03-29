@@ -42,13 +42,11 @@ public class FavoriteGamesActivity extends AppCompatActivity {
         Button backToMainButton = findViewById(R.id.back_to_main_button);
 
         favoriteGames = new ArrayList<>();
-        // כאן adapter מקבל רשימת אובייקטי Game
         adapter = new FavoriteGamesAdapter(this, favoriteGames, userId, databaseManager);
         gamesListView.setAdapter(adapter);
 
         loadFavoriteGames();
 
-        // כפתור חזרה למסך הראשי
         backToMainButton.setOnClickListener(v -> {
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -59,15 +57,14 @@ public class FavoriteGamesActivity extends AppCompatActivity {
             if (!gameName.isEmpty()) {
                 String gameId = java.util.UUID.randomUUID().toString();
                 Game game = new Game(gameId, gameName);
-                // הוספת אובייקט Game כמועדף
                 databaseManager.addFavoriteGameObject(userId, game);
 
                 favoriteGames.add(game);
                 adapter.notifyDataSetChanged();
                 gameNameInput.setText("");
-                Toast.makeText(this, "משחק נוסף למועדפים!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Another game added to favorites!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "נא להזין שם משחק", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter the game name.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -83,7 +80,7 @@ public class FavoriteGamesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(FavoriteGamesActivity.this, "שגיאה בטעינת המשחקים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FavoriteGamesActivity.this, "Error loading the games", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -108,7 +108,6 @@ public class NotificationsFragment extends Fragment {
                         int position = viewHolder.getAdapterPosition();
                         AppNotification notif = notifications.get(position);
 
-                        // מחיקה מה- Firebase
                         databaseManager.removeNotification(userId, notif.getId(), new FirebaseDatabaseManager.OperationCallback() {
                             @Override
                             public void onSuccess() {

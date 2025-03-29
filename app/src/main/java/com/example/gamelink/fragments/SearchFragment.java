@@ -70,12 +70,12 @@ public class SearchFragment extends Fragment {
                     public void onSuccess() {
                         currentFriends.add(userId);
                         userAdapter.notifyDataSetChanged();
-                        Toast.makeText(getContext(), user.getNickname() + " נוסף לרשימת החברים שלך!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), user.getNickname() + "Added to your friends list!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        Toast.makeText(getContext(), "שגיאה בהוספת חבר", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error adding friend", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -90,12 +90,12 @@ public class SearchFragment extends Fragment {
                     public void onSuccess() {
                         currentFriends.remove(userId);
                         userAdapter.notifyDataSetChanged();
-                        Toast.makeText(getContext(), user.getNickname() + " הוסר מרשימת החברים שלך", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), user.getNickname() + "Removed from your friends list", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        Toast.makeText(getContext(), "שגיאה בהסרת חבר", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error removing friend", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -147,7 +147,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getContext(), "נכשלה טעינת רשימת החברים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to load the friends list", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -180,7 +180,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getContext(), "נכשלה טעינת המשתמשים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to load the users", Toast.LENGTH_SHORT).show();
             }
         });
     }

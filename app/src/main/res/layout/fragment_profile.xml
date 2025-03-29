@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- תמונת פרופיל עגולה -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image_view"
             android:layout_width="120dp"
@@ -24,7 +23,6 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="16dp"/>
 
-        <!-- שם המשתמש -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/profile_name_text_view"
             android:layout_width="wrap_content"
@@ -35,7 +33,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="8dp" />
 
-        <!-- אימייל -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/profile_email_text_view"
             android:layout_width="wrap_content"
@@ -44,7 +41,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="8dp" />
 
-        <!-- דירוג ממוצע (אופציונלי) -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/profile_rating_text_view"
             android:layout_width="wrap_content"
@@ -52,7 +48,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="16dp" />
 
-        <!-- כפתור עריכת פרופיל -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/profile_edit_button"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -66,7 +61,6 @@
 			app:cornerRadius="16dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- כפתור משחקים מועדפים -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/profile_favorite_games_button"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -79,7 +73,6 @@
 			android:textColor="@color/white"
             android:layout_marginBottom="16dp" />
 
-        <!-- כפתור התנתקות -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/profile_logout_button"
             style="@style/Widget.MaterialComponents.Button.TextButton"

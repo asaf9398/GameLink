@@ -31,20 +31,13 @@
     </style>
 
 
-        <!-- סגנון לכפתור FilledButton, יורש מהכפתור הרגיל של Material -->
     <style name="Widget.MaterialComponents.Button.FilledButton"
             parent="@style/Widget.MaterialComponents.Button">
-            <!-- אם תרצה לשנות צבע רקע או טקסט, הוסף כאן את התכונות -->
-            <!-- <item name="android:backgroundTint">@color/purple_700</item> -->
-            <!-- <item name="android:textColor">@android:color/white</item> -->
     </style>
 
 
-        <!-- סגנון לאימג'וויו בצורת עיגול -->
     <style name="ShapeAppearanceOverlay.MaterialComponents.Circle.ImageView"
             parent="@style/ShapeAppearance.MaterialComponents.SmallComponent">
-
-            <!-- יש כל מיני הורים אפשריים. זה אחד שאפשר להשתמש בו כבסיס. -->
             <item name="cornerFamily">rounded</item>
             <item name="cornerSize">50%</item>
     </style>

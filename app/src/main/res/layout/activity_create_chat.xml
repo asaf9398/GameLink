@@ -17,7 +17,6 @@
         android:orientation="vertical">
 
 
-        <!-- Chat Name (visible only for group chats) -->
         <EditText
             android:id="@+id/chat_name_edit_text"
             android:layout_width="match_parent"
@@ -25,7 +24,6 @@
             android:hint="Chat Name (for group chat)"
             android:layout_marginTop="8dp" />
 
-        <!-- Participants: Enter user IDs separated by commas -->
         <EditText
             android:id="@+id/participants_edit_text"
             android:layout_width="match_parent"
@@ -33,7 +31,6 @@
             android:hint="Enter participant user IDs, separated by commas"
             android:layout_marginTop="8dp" />
 
-        <!-- Button to create the chat -->
         <Button
             android:id="@+id/create_chat_button"
             android:layout_width="match_parent"

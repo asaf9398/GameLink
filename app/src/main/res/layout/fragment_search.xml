@@ -8,7 +8,6 @@
     android:padding="@dimen/margin_medium"
     android:background="@color/colorBackground">
 
-    <!-- כותרת או טקסט הכוונה לחיפוש -->
     <TextView
         android:id="@+id/search_title"
         android:layout_width="wrap_content"
@@ -18,7 +17,6 @@
         android:textSize="20sp"
         android:layout_marginBottom="@dimen/margin_medium"/>
 
-    <!-- שדה חיפוש לפי Nickname (כינוי) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_nickname_text_input_layout"
         style="@style/Widget.GameLink.TextInputLayout"
@@ -33,7 +31,6 @@
             android:inputType="textPersonName"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- שדה חיפוש לפי משחק -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_game_text_input_layout"
         style="@style/Widget.GameLink.TextInputLayout"
@@ -50,7 +47,6 @@
             android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- שדה חיפוש לפי מדינה -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_country_text_input_layout"
         style="@style/Widget.GameLink.TextInputLayout"
@@ -67,7 +63,6 @@
             android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- כפתורי חיפוש וסינון מתקדם -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,7 +82,6 @@
 
     </LinearLayout>
 
-    <!-- רשימה של תוצאות החיפוש -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"
         style="@style/MaterialRecyclerViewStyle"

@@ -20,12 +20,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
 
-        // Set initial state
         darkModeSwitch.setChecked(DarkModeManager.isDarkModeEnabled(this));
 
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             DarkModeManager.setDarkMode(this, isChecked);
-            recreate(); // Refresh activity to apply changes
+            recreate();
         });
     }
 }

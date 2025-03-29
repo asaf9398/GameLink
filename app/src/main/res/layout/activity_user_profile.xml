@@ -20,7 +20,6 @@
 		app:layout_constraintStart_toStartOf="parent"
 		android:layout_margin="8dp"/>
 		
-    <!-- תמונת פרופיל -->
     <ImageView
         android:id="@+id/user_profile_image"
         android:layout_width="96dp"
@@ -33,7 +32,6 @@
         android:src="@drawable/ic_launcher_foreground"
         android:contentDescription="@string/profile_image" />
 
-    <!-- שם משתמש -->
     <TextView
         android:id="@+id/user_profile_nickname"
         android:layout_width="wrap_content"
@@ -46,7 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- מדינה -->
     <TextView
         android:id="@+id/user_profile_country"
         android:layout_width="wrap_content"
@@ -58,7 +55,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- גיל -->
     <TextView
         android:id="@+id/user_profile_age"
         android:layout_width="wrap_content"
@@ -70,7 +66,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- משחקים מועדפים -->
     <TextView
         android:id="@+id/user_profile_fav_games_title"
         android:layout_width="wrap_content"

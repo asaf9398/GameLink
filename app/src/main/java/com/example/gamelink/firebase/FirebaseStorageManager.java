@@ -16,7 +16,6 @@ public class FirebaseStorageManager {
         storageReference = FirebaseStorage.getInstance().getReference();
     }
 
-    // Upload profile picture
     public void uploadProfilePicture(String userId, Uri fileUri, UploadCallback callback) {
         StorageReference profileRef = storageReference.child("profile_pictures/" + userId + ".jpg");
 
@@ -33,7 +32,6 @@ public class FirebaseStorageManager {
                 });
     }
 
-    // Upload chat file
     public void uploadChatFile(String chatId, String fileName, Uri fileUri, UploadCallback callback) {
         StorageReference chatFileRef = storageReference.child("chat_files/" + chatId + "/" + fileName);
 
@@ -50,7 +48,6 @@ public class FirebaseStorageManager {
                 });
     }
 
-    // Callback interface for upload results
     public interface UploadCallback {
         void onSuccess(String downloadUrl);
 

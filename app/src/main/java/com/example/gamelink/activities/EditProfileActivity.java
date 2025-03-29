@@ -56,7 +56,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
-            Toast.makeText(this, "שגיאה בזיהוי המשתמש", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error in user identification", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -98,7 +98,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(EditProfileActivity.this, "שגיאה בטעינת הנתונים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 Log.e("EditProfile", "Load user info failed", e);
             }
         });
@@ -110,7 +110,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String newCountry = countryInput.getText().toString().trim();
 
         if (newName.isEmpty() || ageStr.isEmpty() || newCountry.isEmpty()) {
-            Toast.makeText(this, "אנא מלא את כל השדות", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -118,7 +118,7 @@ public class EditProfileActivity extends AppCompatActivity {
         try {
             newAge = Integer.parseInt(ageStr);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "גיל לא תקין", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid age", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -134,7 +134,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     .addOnSuccessListener(downloadUri ->
                             updateUserProfile(newName, newAge, newCountry, downloadUri.toString()))
                     .addOnFailureListener(e -> {
-                        Toast.makeText(EditProfileActivity.this, "נכשל בהעלאת תמונה", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProfileActivity.this, "Failed to upload the image", Toast.LENGTH_SHORT).show();
                         Log.e("EditProfile", "Image upload failed", e);
                     });
         } else {
@@ -146,13 +146,13 @@ public class EditProfileActivity extends AppCompatActivity {
         databaseManager.updateUserProfile(userId, name, age, country, imageUrl, new FirebaseDatabaseManager.OperationCallback() {
             @Override
             public void onSuccess() {
-                Toast.makeText(EditProfileActivity.this, "הפרופיל עודכן!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "The profile has been updated!", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(EditProfileActivity.this, "נכשל בעדכון", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "Failed to update.", Toast.LENGTH_SHORT).show();
                 Log.e("EditProfile", "Profile update failed", e);
             }
         });

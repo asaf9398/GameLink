@@ -20,10 +20,7 @@ import com.example.gamelink.models.Game;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Activity שמנהל "מאגר משחקים גלובלי" תחת הענף "games" ב-Firebase,
- * מאפשר למשתמש להכניס משחק חדש, ורואה את רשימת המשחקים הקיימים.
- */
+
 public class ManageGamesActivity extends AppCompatActivity {
 
     private EditText inputGlobalGameName;
@@ -39,38 +36,30 @@ public class ManageGamesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_games);
 
-        // קישור ל-Views מה-XML
         inputGlobalGameName = findViewById(R.id.input_global_game_name);
         btnAddGlobalGame    = findViewById(R.id.btn_add_global_game);
         globalGamesRecycler = findViewById(R.id.global_games_recycler);
 
-        // אתחול רשימת המשחקים
         allGames = new ArrayList<>();
 
-        // אתחול Firebase Database Manager
         dbManager = new FirebaseDatabaseManager();
 
-        // Adapter המציג רשימת Game (בהנחה ששינית את GameAdapter לתמוך ב-List<Game>)
         gameAdapter = new GameAdapter(allGames);
         globalGamesRecycler.setLayoutManager(new LinearLayoutManager(this));
         globalGamesRecycler.setAdapter(gameAdapter);
 
-        // טוען את כל המשחקים הקיימים ב-"games"
         loadGlobalGames();
 
-        // כפתור להוספת משחק חדש למאגר הגלובלי
         btnAddGlobalGame.setOnClickListener(v -> {
             String name = inputGlobalGameName.getText().toString().trim();
             if(!name.isEmpty()) {
                 String id = java.util.UUID.randomUUID().toString();
 
-                // מוסיפים את המשחק ל-Firebase
                 dbManager.addGameObject(new Game(id, name), new FirebaseDatabaseManager.OperationCallback() {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(ManageGamesActivity.this, "Game added: " + name, Toast.LENGTH_SHORT).show();
                         inputGlobalGameName.setText("");
-                        // לאחר הוספה, אפשר לרענן את הרשימה
                         loadGlobalGames();
                     }
 
@@ -85,9 +74,6 @@ public class ManageGamesActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * טוען את רשימת המשחקים הגלובליים מ-Firebase ומעדכן ב-RecyclerView.
-     */
     private void loadGlobalGames() {
         dbManager.getAllGlobalGames(new FirebaseDatabaseManager.DataCallback<List<Game>>() {
             @Override

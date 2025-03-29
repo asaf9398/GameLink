@@ -66,7 +66,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             notifyItemChanged(position);
         });
 
-        // ←←← זה מה שחסר לך
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onUserClicked(user);

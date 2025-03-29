@@ -11,15 +11,14 @@ import com.google.firebase.database.Exclude;
  * Represents a Chat/Conversation room.
  */
 public class Chat {
-    private String chatId;            // Unique chat ID
-    private String chatName;          // Chat name/title (e.g. "Group #1" / "Private with John")
-    private boolean isGroup;          // Is this a group chat or a private 1-to-1?
-    private List<String> participants;// userIds of participants
+    private String chatId;
+    private String chatName;
+    private boolean isGroup;
+    private List<String> participants;
 
-    private String lastMessage;       // Content of the last message
-    private long lastMessageTime;     // Timestamp of the last message
+    private String lastMessage;
+    private long lastMessageTime;
 
-    // Empty constructor for Firebase
     public Chat() { }
 
     public Chat(String chatId, String chatName, boolean isGroup,
@@ -32,7 +31,6 @@ public class Chat {
         this.lastMessageTime = lastMessageTime;
     }
 
-    // Getters + Setters
     public String getChatId() {
         return chatId;
     }
@@ -75,9 +73,6 @@ public class Chat {
         this.lastMessageTime = lastMessageTime;
     }
 
-    /**
-     * Format lastMessageTime for display (e.g. "03/20 15:42").
-     */
     @Exclude
     public String getFormattedLastMessageTime() {
         if (lastMessageTime == 0) return "";

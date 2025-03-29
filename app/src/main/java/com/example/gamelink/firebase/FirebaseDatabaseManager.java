@@ -25,14 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Manages operations with Firebase Realtime Database, including users, games, messages, and chats.
- */
+
 public class FirebaseDatabaseManager {
 
     private static final String TAG = "FirebaseDatabaseManager";
 
-    // References in the Realtime Database
     private final DatabaseReference usersRef;
     private final DatabaseReference gamesRef;
     private final DatabaseReference messagesRef;
@@ -46,22 +43,14 @@ public class FirebaseDatabaseManager {
         chatsRef    = database.getReference("chats");
     }
 
-    // ==========================================
-    // ========== User Methods ==================
-    // ==========================================
 
-    /**
-     * Adds a new user to "users/{userId}".
-     */
     public void addUser(User user) {
         usersRef.child(user.getUserId()).setValue(user)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User added successfully"))
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to add user", e));
     }
 
-    /**
-     * Adds a rating/feedback to a user under "users/{userId}/ratings".
-     */
+
     public void addRating(String userId, int rating, String feedback) {
         DatabaseReference ratingsRef = usersRef
                 .child(userId)
@@ -75,9 +64,7 @@ public class FirebaseDatabaseManager {
         ratingsRef.setValue(ratingData);
     }
 
-    /**
-     * Fetches all users from "users" once.
-     */
+
     public void getAllUsers(DataCallback<List<User>> callback) {
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -86,9 +73,7 @@ public class FirebaseDatabaseManager {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     if (userSnapshot.exists()) {
                         try {
-                            // Extract user fields
                             String userId   = userSnapshot.child("userId").getValue(String.class);
-                            //String name     = userSnapshot.child("name").getValue(String.class);
                             String nickname = userSnapshot.child("nickname").getValue(String.class);
 
                             Integer ageVal  = userSnapshot.child("age").getValue(Integer.class);
@@ -99,7 +84,6 @@ public class FirebaseDatabaseManager {
                             String profileImageUrl = userSnapshot.child("profileImageUrl").getValue(String.class);
 
 
-                            // Favorite games (extracting only game names)
                             List<String> favoriteGames = new ArrayList<>();
                             if (userSnapshot.child("favoriteGames").exists()) {
                                 for (DataSnapshot gameSnap : userSnapshot.child("favoriteGames").getChildren()) {
@@ -111,7 +95,6 @@ public class FirebaseDatabaseManager {
                             }
 
 
-                            // Create the user object
                             User user = new User(userId, nickname, age, country, favoriteGames,profileImageUrl);
                             users.add(user);
 
@@ -132,13 +115,7 @@ public class FirebaseDatabaseManager {
     }
 
 
-    // ==========================================
-    // ========== Messages (Chat) ===============
-    // ==========================================
 
-    /**
-     * Adds a new Message object to "messages/{chatId}/{msgId}".
-     */
     public void addMessageObject(String chatId, Message message) {
         String msgId = messagesRef.child(chatId).push().getKey();
         if (msgId != null) {
@@ -163,7 +140,6 @@ public class FirebaseDatabaseManager {
                         if (chat == null || chat.getParticipants() == null) return;
 
                         for (String nickname : chat.getParticipants()) {
-                            // לא לשלוח לשולח עצמו
                             if (!nickname.equals(senderNickname)) {
                                 getUserIdByNickname(nickname, new DataCallback<String>() {
                                     @Override
@@ -230,9 +206,7 @@ public class FirebaseDatabaseManager {
     }
 
 
-    /**
-     * Loads the list of Message objects from "messages/{chatId}" once.
-     */
+
     public void getMessageObjects(String chatId, DataCallback<List<Message>> callback) {
         messagesRef.child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -255,13 +229,7 @@ public class FirebaseDatabaseManager {
     }
 
 
-    // ==========================================
-    // ========== Global Games ==================
-    // ==========================================
 
-    /**
-     * Adds a new Game object to "games/{gameId}".
-     */
     public void addGameObject(Game game, OperationCallback callback) {
         gamesRef.child(game.getGameId())
                 .setValue(game)
@@ -275,9 +243,7 @@ public class FirebaseDatabaseManager {
                 });
     }
 
-    /**
-     * Retrieves all Game objects from "games".
-     */
+
     public void getAllGlobalGames(DataCallback<List<Game>> callback) {
         gamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -300,13 +266,7 @@ public class FirebaseDatabaseManager {
     }
 
 
-    // ==========================================
-    // ========== Favorite Games ================
-    // ==========================================
 
-    /**
-     * Adds a Game to the user's favorite list: "users/{userId}/favoriteGames/{gameId}".
-     */
     public void addFavoriteGameObject(String userId, Game game) {
         usersRef.child(userId)
                 .child("favoriteGames")
@@ -318,9 +278,7 @@ public class FirebaseDatabaseManager {
                         Log.e(TAG, "Failed to add favorite game object", e));
     }
 
-    /**
-     * Loads the user's favorite games as Game objects from "users/{userId}/favoriteGames".
-     */
+
     public void getUserFavoriteGamesAsObjects(String userId, DataCallback<List<Game>> callback) {
         usersRef.child(userId)
                 .child("favoriteGames")
@@ -344,9 +302,7 @@ public class FirebaseDatabaseManager {
                 });
     }
 
-    /**
-     * Removes a game from a user's favorites: "users/{userId}/favoriteGames/{gameId}".
-     */
+
     public void removeFavoriteGameObject(String userId, String gameId) {
         usersRef.child(userId)
                 .child("favoriteGames")
@@ -359,13 +315,7 @@ public class FirebaseDatabaseManager {
     }
 
 
-    // ==========================================
-    // ========== Chat Methods ==================
-    // ==========================================
 
-    /**
-     * Adds a new Chat object to "chats/{chatId}".
-     */
     public void addChatObject(Chat chat, OperationCallback callback) {
         chatsRef.child(chat.getChatId())
                 .setValue(chat)
@@ -379,10 +329,7 @@ public class FirebaseDatabaseManager {
                 });
     }
 
-    /**
-     * Loads the list of Chats in which a user participates:
-     * "chats" -> filter by chat.getParticipants().contains(userId)
-     */
+
     public void getUserChats(String userId, DataCallback<List<Chat>> callback) {
         chatsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -407,14 +354,7 @@ public class FirebaseDatabaseManager {
     }
 
 
-    // ==========================================
-    // ========== Deprecated Example ============
-    // ==========================================
 
-    /**
-     * An older example for adding a game by just ID/name string.
-     * Not recommended if you store full Game objects.
-     */
     public void addGame(String gameId, String gameName) {
         gamesRef.child(gameId)
                 .setValue(gameName)
@@ -422,9 +362,7 @@ public class FirebaseDatabaseManager {
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to add game", e));
     }
 
-    /**
-     * Fetch nickname of a user by userId (UID).
-     */
+
     public void getNicknameByUserId(String userId, DataCallback<String> callback) {
         usersRef.child(userId).child("nickname")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -473,7 +411,7 @@ public class FirebaseDatabaseManager {
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                             if (count.decrementAndGet() == 0) {
-                                callback.onSuccess(nicknames); // return what we got
+                                callback.onSuccess(nicknames);
                             }
                         }
                     });
@@ -492,7 +430,7 @@ public class FirebaseDatabaseManager {
                 .addOnSuccessListener(aVoid -> {
                     usersRef.child(friendId).child("friends").child(userId).setValue(true)
                             .addOnSuccessListener(aVoid2 -> {
-                                sendFriendRequestNotification(userId, friendId); // זו הקריאה החשובה
+                                sendFriendRequestNotification(userId, friendId);
                                 if (callback != null) callback.onSuccess();
                             })
                             .addOnFailureListener(e -> {
@@ -681,7 +619,7 @@ public class FirebaseDatabaseManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<String> ids = new ArrayList<>();
                 for (DataSnapshot friendSnap : snapshot.getChildren()) {
-                    ids.add(friendSnap.getKey());  // <-- זה הפתרון הנכון!
+                    ids.add(friendSnap.getKey());
                 }
                 callback.onSuccess(ids);
             }
@@ -695,10 +633,8 @@ public class FirebaseDatabaseManager {
 
 
     public void removeFriend(String userId, String friendId, OperationCallback callback) {
-        // Remove from user's list
         usersRef.child(userId).child("friends").child(friendId).removeValue()
                 .addOnSuccessListener(aVoid -> {
-                    // Remove from friend's list
                     usersRef.child(friendId).child("friends").child(userId).removeValue()
                             .addOnSuccessListener(aVoid2 -> {
                                 if (callback != null) callback.onSuccess();
@@ -713,16 +649,6 @@ public class FirebaseDatabaseManager {
     }
 
 
-
-
-
-    // ==========================================
-    // ========== Internal Classes ==============
-    // ==========================================
-
-    /**
-     * Simple helper class if you want to store game references as {gameId, gameName} pairs.
-     */
     public static class GameEntry {
         private String gameId;
         private String gameName;
@@ -742,17 +668,12 @@ public class FirebaseDatabaseManager {
         }
     }
 
-    /**
-     * Generic data callback for async fetch operations.
-     */
     public interface DataCallback<T> {
         void onSuccess(T data);
         void onFailure(Exception e);
     }
 
-    /**
-     * A callback for operations (e.g. add/update) that return success/failure only.
-     */
+
     public interface OperationCallback {
         void onSuccess();
         void onFailure(Exception e);

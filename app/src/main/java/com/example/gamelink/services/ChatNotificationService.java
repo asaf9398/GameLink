@@ -23,7 +23,6 @@ public class ChatNotificationService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        // ניהול הודעה חדשה
         if (remoteMessage.getNotification() != null) {
             String title = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
@@ -35,14 +34,12 @@ public class ChatNotificationService extends FirebaseMessagingService {
     private void showNotification(String title, String body) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // יצירת ערוץ התראות עבור אנדרואיד 8+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Chat Notifications", NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
         }
 
         Intent intent = new Intent(this, MainActivity.class);
-// אפשר להוסיף extra אם צריך לזכור שהגענו מהתראה של צ'אט
         intent.putExtra("openChat", true);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

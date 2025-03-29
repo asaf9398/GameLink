@@ -88,12 +88,12 @@ public class ProfileFragment extends Fragment {
                         friendsIdSet.remove(friendId);
                         friendsList.remove(user);
                         friendsAdapter.notifyDataSetChanged();
-                        Toast.makeText(getContext(), user.getNickname() + " הוסר מרשימת החברים", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), user.getNickname() + " Removed from the friends list", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        Toast.makeText(getContext(), "שגיאה בהסרת חבר", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error removing friend", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -113,7 +113,6 @@ public class ProfileFragment extends Fragment {
 
         emailTextView.setText(user.getEmail());
 
-        // בחלק של onCreateView, איפה שנטענים פרטי המשתמש:
 
         databaseManager.getAllUsers(new FirebaseDatabaseManager.DataCallback<List<User>>() {
             @Override
@@ -122,7 +121,6 @@ public class ProfileFragment extends Fragment {
                     if (u.getUserId() != null && u.getUserId().equals(currentUserId)) {
                         nameTextView.setText(u.getNickname() != null ? u.getNickname() : "No Name");
 
-                        // טעינת תמונת פרופיל
                         if (u.getProfileImageUrl() != null && !u.getProfileImageUrl().isEmpty()) {
                             Glide.with(requireContext())
                                     .load(u.getProfileImageUrl())
@@ -137,7 +135,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getContext(), "שגיאה בטעינת הנתונים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -158,7 +156,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getContext(), "שגיאה בטעינת חברים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading friends", Toast.LENGTH_SHORT).show();
             }
         });
 

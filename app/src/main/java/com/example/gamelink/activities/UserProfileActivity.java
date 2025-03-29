@@ -32,13 +32,12 @@ public class UserProfileActivity extends AppCompatActivity {
         ageText = findViewById(R.id.user_profile_age);
         countryText = findViewById(R.id.user_profile_country);
         favGamesText = findViewById(R.id.user_profile_fav_games);
-        profileImageView = findViewById(R.id.user_profile_image);  // 👈 טעינת תמונה
+        profileImageView = findViewById(R.id.user_profile_image);
 
         db = new FirebaseDatabaseManager();
         userId = getIntent().getStringExtra("userId");
 
         if (userId != null) {
-            // שליפת פרטי המשתמש
             db.getAllUsers(new FirebaseDatabaseManager.DataCallback<List<User>>() {
                 @Override
                 public void onSuccess(List<User> users) {
@@ -62,11 +61,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Exception e) {
-                    Toast.makeText(UserProfileActivity.this, "שגיאה בטעינת המשתמש", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserProfileActivity.this, "Error loading the user.", Toast.LENGTH_SHORT).show();
                 }
             });
 
-            // שליפת המשחקים המועדפים
             db.getUserFavoriteGamesAsObjects(userId, new FirebaseDatabaseManager.DataCallback<List<Game>>() {
                 @Override
                 public void onSuccess(List<Game> games) {
@@ -75,7 +73,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         for (Game game : games) {
                             sb.append(game.getGameName()).append(", ");
                         }
-                        // הסרת פסיק אחרון
                         sb.setLength(sb.length() - 2);
                         favGamesText.setText(sb.toString());
                     } else {
@@ -85,12 +82,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Exception e) {
-                    Toast.makeText(UserProfileActivity.this, "שגיאה בטעינת המשחקים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserProfileActivity.this, "Error loading the games.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
-        // כפתור חזרה
         ImageButton backButton = findViewById(R.id.back_button);
         if (backButton != null) {
             backButton.setOnClickListener(v -> finish());

@@ -6,7 +6,6 @@ public class Message {
     private long timestamp;
 
     public Message() {
-        // Default constructor
     }
 
     public Message(String senderId, String content, long timestamp) {

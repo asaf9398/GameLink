@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        // Set the default fragment (Chat List)
         loadFragment(new ChatListFragment());
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

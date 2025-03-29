@@ -53,9 +53,7 @@ public class FavoriteGamesAdapter extends ArrayAdapter<Game> {
             gameNameText.setText(game.getGameName());
 
             deleteGameButton.setOnClickListener(v -> {
-                // מחיקת המשחק מ-Firebase לפי gameId
                 databaseManager.removeFavoriteGameObject(userId, game.getGameId());
-                // מחיקה מה-LIst
                 games.remove(position);
                 notifyDataSetChanged();
             });
