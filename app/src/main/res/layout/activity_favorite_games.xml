@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/margin_medium"
+    android:background="@color/colorBackground">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Favorite Games"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/margin_medium"/>
 
     <EditText
         android:id="@+id/game_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="הזן שם משחק"/>
+        android:hint="Enter Game's name"
+        android:layout_marginBottom="@dimen/margin_small"/>
 
     <Button
         android:id="@+id/add_game_button"
+        style="@style/Widget.GameLink.Button"
+        android:text="Add Game"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="הוסף משחק"/>
+        android:layout_height="wrap_content"/>
 
     <ListView
         android:id="@+id/games_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-		
-	<Button
-		android:id="@+id/back_to_main_button"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="חזור למסך הראשי"
-		android:layout_marginTop="16dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:layout_marginTop="@dimen/margin_small"/>
+
+    <Button
+        android:id="@+id/back_to_main_button"
+        style="@style/Widget.GameLink.Button"
+        android:text="Back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"/>
 
 </LinearLayout>

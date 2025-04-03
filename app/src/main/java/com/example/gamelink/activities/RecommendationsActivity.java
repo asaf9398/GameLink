@@ -30,7 +30,6 @@ public class RecommendationsActivity extends AppCompatActivity {
         recommendationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         recommendationsRecyclerView.setAdapter(recommendationAdapter);
 
-        // לדוגמה: הוספת המלצות
         recommendations.add("Recommended game: Chess");
         recommendations.add("Recommended player: John");
         recommendationAdapter.notifyDataSetChanged();

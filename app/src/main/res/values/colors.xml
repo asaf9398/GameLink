@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <color name="colorPrimary">#FFA725</color>
+    <color name="colorPrimaryVariant">#FFA725</color>
+    <color name="colorSecondary">#03DAC6</color>
+    <color name="colorBackground">#FFF5E4</color>
+    <color name="colorSurface">#fff5e4</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#000000</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-	<color name="background_color">#F5F5F5</color>
+    <color name="purple_700">#FFA725</color>
+
+    <color name="purple_200">#FFA725</color>
+    <color name="purple_500">#FFA725</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="friend_item_background">#F2EFE7</color>
+    <color name="send_feedback_button">#735557</color>
+    <color name="search_player_button">#735557</color>
+    <color name="new_chat_button">#735557</color>
+	<color name="my_custom_purple">#E8DFFB</color>
 
 </resources>

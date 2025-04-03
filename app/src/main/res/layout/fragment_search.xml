@@ -1,34 +1,93 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/margin_medium"
+    android:background="@color/colorBackground">
 
-    <EditText
-        android:id="@+id/game_edit_text"
+    <TextView
+        android:id="@+id/search_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search For Players"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginBottom="@dimen/margin_medium"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_nickname_text_input_layout"
+        style="@style/Widget.GameLink.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nickname">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_nickname_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_game_text_input_layout"
+        style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Game"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginTop="@dimen/margin_small">
 
-    <EditText
-        android:id="@+id/country_edit_text"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/search_game_autocomplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:inputType="text"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_country_text_input_layout"
+        style="@style/Widget.GameLink.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Country"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginTop="@dimen/margin_small">
 
-    <Button
-        android:id="@+id/search_button"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/search_country_autocomplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:inputType="text"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search"
-        android:layout_marginBottom="8dp" />
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_medium">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_button"
+            style="@style/Widget.MaterialComponents.Button.FilledButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_height="wrap_content"
+			app:backgroundTint="@color/search_player_button"
+			app:cornerRadius="16dp"
+            android:text="Search" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"
+        style="@style/MaterialRecyclerViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_weight="1"/>
+
 </LinearLayout>

@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout
+<LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/margin_medium"
+    android:background="@color/colorBackground">
 
-    <EditText
-        android:id="@+id/game_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Game"
-        android:layout_marginBottom="8dp" />
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.GameLink.TextInputLayout"
+        android:hint="Game">
 
-    <EditText
-        android:id="@+id/country_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/game_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.GameLink.TextInputLayout"
         android:hint="Country"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginTop="@dimen/margin_small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/country_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/search_button"
+        style="@style/Widget.GameLink.Button"
+        android:text="Search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginTop="@dimen/margin_small"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/margin_small"/>
 </LinearLayout>

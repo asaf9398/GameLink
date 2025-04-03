@@ -12,10 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gamelink.MainActivity;
 import com.example.gamelink.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,26 +28,21 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // אתחול Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        // אם המשתמש מחובר, מעבר ל- MainActivity
         if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
 
-        // קישור ל-UI
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.login_button);
         registerTextView = findViewById(R.id.register_text);
         progressBar = findViewById(R.id.progress_bar);
 
-        // כפתור התחברות
         loginButton.setOnClickListener(v -> loginUser());
 
-        // מעבר למסך הרשמה
         registerTextView.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
@@ -61,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "יש למלא את כל השדות!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "All fields must be filled out!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -71,13 +64,13 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "You have successfully logged in!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     } else {
-                        Log.e("LoginError", "התחברות נכשלה", task.getException());
-                        Toast.makeText(this, "התחברות נכשלה! בדוק אימייל וסיסמה.", Toast.LENGTH_SHORT).show();
+                        Log.e("LoginError", "Login failed.", task.getException());
+                        Toast.makeText(this, "Login failed! Please check your email and password.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

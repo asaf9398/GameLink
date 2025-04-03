@@ -13,11 +13,9 @@ public class Constants {
     public static final String DARK_MODE_KEY = "dark_mode_enabled";
     public static final String LANGUAGE_KEY = "app_language";
 
-    // Notification Channels
     public static final String CHAT_CHANNEL = "CHAT_NOTIFICATIONS";
     public static final String PUSH_CHANNEL = "PUSH_NOTIFICATIONS";
 
-    // Example constants for matching
     public static final int MATCH_SCORE_THRESHOLD = 70;
 }
 

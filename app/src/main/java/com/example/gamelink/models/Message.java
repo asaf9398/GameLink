@@ -17,7 +17,6 @@ public class Message {
     public String getSenderId() {
         return senderId;
     }
-
     public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
@@ -25,7 +24,6 @@ public class Message {
     public String getContent() {
         return content;
     }
-
     public void setContent(String content) {
         this.content = content;
     }
@@ -33,7 +31,6 @@ public class Message {
     public long getTimestamp() {
         return timestamp;
     }
-
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }

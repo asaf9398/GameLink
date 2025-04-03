@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/input_global_game_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type game name" />
+
+    <Button
+        android:id="@+id/btn_add_global_game"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Global Game"
+        android:layout_marginTop="8dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/global_games_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>

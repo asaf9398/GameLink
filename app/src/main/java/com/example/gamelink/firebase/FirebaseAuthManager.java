@@ -25,7 +25,6 @@ public class FirebaseAuthManager {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    // Initialize Google Sign-In
     public void initializeGoogleSignIn(Activity activity, String webClientId) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(webClientId)
@@ -34,13 +33,11 @@ public class FirebaseAuthManager {
         googleSignInClient = GoogleSignIn.getClient(activity, gso);
     }
 
-    // Sign in with Google
     public void signInWithGoogle(Activity activity, int requestCode) {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         activity.startActivityForResult(signInIntent, requestCode);
     }
 
-    // Handle Google Sign-In result
     public void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask, Activity activity) {
         try {
             GoogleSignInAccount account = completedTask.getResult(Exception.class);
@@ -69,7 +66,6 @@ public class FirebaseAuthManager {
         });
     }
 
-    // Sign out
     public void signOut(Activity activity) {
         mAuth.signOut();
         googleSignInClient.signOut().addOnCompleteListener(activity, task -> {
@@ -77,7 +73,6 @@ public class FirebaseAuthManager {
         });
     }
 
-    // Get current user
     public FirebaseUser getCurrentUser() {
         return mAuth.getCurrentUser();
     }

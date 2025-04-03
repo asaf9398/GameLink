@@ -8,7 +8,6 @@ public class FirebaseNotificationManager {
 
     private static final String TAG = "FirebaseNotificationMgr";
 
-    // Subscribe to a topic for receiving notifications
     public void subscribeToTopic(String topic) {
         FirebaseMessaging.getInstance().subscribeToTopic(topic)
                 .addOnCompleteListener(task -> {
@@ -20,7 +19,6 @@ public class FirebaseNotificationManager {
                 });
     }
 
-    // Unsubscribe from a topic
     public void unsubscribeFromTopic(String topic) {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
                 .addOnCompleteListener(task -> {
@@ -32,9 +30,7 @@ public class FirebaseNotificationManager {
                 });
     }
 
-    // Handle received notification (can be used in the activity or service)
     public void onMessageReceived(String title, String body) {
         Log.d(TAG, "Notification received - Title: " + title + ", Body: " + body);
-        // You can add custom logic here, like showing a local notification
     }
 }

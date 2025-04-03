@@ -8,10 +8,10 @@ public class User {
     private int age;
     private String country;
     private List<String> favoriteGames;
+    private List<String> friends;
+    private String profileImageUrl;
 
-    public User() {
-        // Default constructor required for Firebase
-    }
+    public User() {}
 
     public User(String userId, String name, int age, String country, List<String> favoriteGames) {
         this.userId = userId;
@@ -20,6 +20,16 @@ public class User {
         this.country = country;
         this.favoriteGames = favoriteGames;
     }
+
+    public User(String userId, String name, int age, String country, List<String> favoriteGames, String profileImageUrl) {
+        this.userId = userId;
+        this.name = name;
+        this.age = age;
+        this.country = country;
+        this.favoriteGames = favoriteGames;
+        this.profileImageUrl=profileImageUrl;
+    }
+
 
     public String getUserId() {
         return userId;
@@ -35,6 +45,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickname() {
+        return name;
+    }
+
+    public void setNickname(String nickname) {
+        this.name = nickname;
     }
 
     public int getAge() {
@@ -59,5 +77,21 @@ public class User {
 
     public void setFavoriteGames(List<String> favoriteGames) {
         this.favoriteGames = favoriteGames;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

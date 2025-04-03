@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recommendation_text_view"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:textColor="@android:color/black"
-    android:textSize="16sp" />
+    android:layout_margin="@dimen/margin_small"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="4dp" >
+
+    <TextView
+        android:id="@+id/recommendation_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_medium"/>
+
+</com.google.android.material.card.MaterialCardView>
